@@ -1,0 +1,16 @@
+
+.em_andamento{
+    background-color:#FFEB3B
+;
+
+}
+.concluido{
+    background-color: #AED581;
+}
+.atrasada{
+    background-color: red;
+}
+
+.planejada{
+    background-color: beige;
+}
