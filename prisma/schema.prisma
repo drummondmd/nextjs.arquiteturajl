@@ -1,0 +1,247 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String            @id @default(uuid())
+  email         String            @unique
+  emailVerified Boolean?          @default(false)
+  passwordHash  String
+  accountStatus String?           @default("ativo")
+  createdAt     DateTime?         @default(now())
+  lastLogin     DateTime?         @default(now())
+  userType      String?
+  budgets       Budget[]
+  projects      Project[]
+  uploadedDocs  ProjectDocument[] @relation("UserUploadedDocuments")
+  profile       UserProfile?
+  tokens        UserToken[]
+}
+
+model UserProfile {
+  id              String    @id @default(uuid())
+  userId          String    @unique
+  firstName       String?
+  lastName        String?
+  phone           String?
+  avatarUrl       String?
+  birthDate       DateTime?
+  gender          String?
+  identityDoc     String?
+  cpf             String?
+  occupation      String?
+  maritalStatus   String?
+  hasChildren     Boolean?
+  ageGroup        String?
+  stylePreference String?
+  referralSource  String?
+  privateNotes    String?
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserToken {
+  id          String    @id @default(uuid())
+  userId      String
+  tokenType   String?
+  token       String
+  tokenExpiry DateTime?
+  createdAt   DateTime? @default(now())
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum statusPhase {
+  planejado
+  em_andamento
+  concluido
+  cancelado
+  atrasado
+}
+
+model Project {
+  id                    String              @id @default(uuid())
+  clientId              String?
+  slug                  String              @unique
+  title                 String
+  status                statusPhase         @default(planejado)
+  projectType           String?
+  developmentType       String?
+  investmentExpectation Decimal?
+  area                  Decimal?
+  initialBudget         Decimal?
+  expectedBudget        Decimal?
+  actualBudget          Decimal?
+  createdAt             DateTime?           @default(now())
+  startDate             DateTime?
+  expectedEndDate       DateTime?
+  endDate               DateTime?
+  coverUrl              String?
+  constructionPhases    ConstructionPhase[]
+  client                User?               @relation(fields: [clientId], references: [id])
+  details               ProjectDetail?
+  documents             ProjectDocument[]
+  designPhases          ProjectPhase[]
+  payments              Payment[]
+}
+
+model ProjectDetail {
+  id               String  @id @default(uuid())
+  projectId        String  @unique
+  type             String?
+  standard         String?
+  technicalManager String?
+  postalCode       String?
+  country          String?
+  state            String?
+  city             String?
+  neighborhood     String?
+  street           String?
+  number           String?
+  complement       String?
+  project          Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model ProjectPhase {
+  id              String             @id @default(uuid())
+  projectId       String
+  name            String
+  status          statusPhase        @default(planejado)
+  startDate       DateTime?
+  expectedEndDate DateTime?
+  endDate         DateTime?
+  notes           String?
+  order           Int?
+  createdAt       DateTime?          @default(now())
+  updatedAt       DateTime?          @default(now())
+  project         Project            @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tasks           ProjectPhaseTask[]
+}
+
+model ProjectPhaseTask {
+  id              String       @id @default(uuid())
+  phaseId         String
+  name            String
+  status          statusPhase        @default(planejado)
+  responsible     String?
+  startDate       DateTime?
+  expectedEndDate DateTime?
+  endDate         DateTime?
+  notes           String?
+  priority        Int?         @default(1)
+  createdAt       DateTime?    @default(now())
+  updatedAt       DateTime?    @default(now())
+  phase           ProjectPhase @relation(fields: [phaseId], references: [id], onDelete: Cascade)
+}
+
+model ConstructionPhase {
+  id              String             @id @default(uuid())
+  projectId       String
+  name            String
+  status          statusPhase        @default(planejado)
+  startDate       DateTime?
+  expectedEndDate DateTime?
+  endDate         DateTime?
+  budget          Decimal?
+  actualCost      Decimal?
+  notes           String?
+  responsible     String?
+  order           Int?
+  project         Project            @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tasks           ConstructionTask[]
+}
+
+model ConstructionTask {
+  id              String            @id @default(uuid())
+  phaseId         String
+  name            String
+  status          statusPhase        @default(planejado)
+  budget          Decimal?
+  actualCost      Decimal?
+  startDate       DateTime?
+  expectedEndDate DateTime?
+  endDate         DateTime?
+  notes           String?
+  responsible     String?
+  priority        Int?
+  fornecedor      String?
+  link            String?
+  phase           ConstructionPhase @relation(fields: [phaseId], references: [id], onDelete: Cascade)
+}
+
+model ProjectDocument {
+  id              String    @id @default(uuid())
+  projectId       String
+  name            String
+  type            String
+  link            String
+  notes           String?
+  uploadedAt      DateTime? @default(now())
+  uploadedById    String?
+  visibleToClient Boolean?  @default(true)
+  description     String?
+  project         Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  uploadedBy      User?     @relation("UserUploadedDocuments", fields: [uploadedById], references: [id])
+}
+
+model Payment {
+  id               String         @id @default(uuid())
+  projectId        String
+  paymentType      paymentType
+  description      String
+  amount           Decimal        @db.Decimal(10, 2)
+  dueDate          DateTime?
+  status           PaymentStatus? @default(pendente)
+  createdAt        DateTime?      @default(now())
+  notificationSent Boolean?       @default(false)
+  project          Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+enum paymentType {
+  entrada
+  saida
+}
+
+enum PaymentStatus {
+  pendente
+  pago
+  atrasado
+  cancelado
+}
+
+model Budget {
+  id           String    @id @default(uuid())
+  clientId     String?
+  totalValue   Decimal
+  status       statusBudget?   @default(enviado)
+  version      Int?      @default(1)
+  sentAt       DateTime? @default(now())
+  acceptedAt   DateTime?
+  paymentTerms String?
+  summary      String?
+  notes        String?
+  fileUrl      String?
+  title        String?
+  client       User?     @relation(fields: [clientId], references: [id])
+}
+
+enum statusBudget {
+  enviado
+  aceito
+  rejeitado
+  cancelado
+}
+
+model ExecutionCostEstimate {
+  id   Int      @id @default(autoincrement())
+  item String
+  cme  Decimal? @db.Decimal(10, 2)
+  r    Decimal? @db.Decimal(10, 2)
+  re   Decimal? @db.Decimal(10, 2)
+  ur   Decimal? @db.Decimal(10, 2)
+  eur  Decimal? @db.Decimal(10, 2)
+  min  Decimal? @db.Decimal(10, 2)
+}

@@ -1,21 +1,28 @@
 import { linksForSideBar } from "@/lib/recursos/links";
 import MainSideBar from "@/components/area-logada/main-sidebar";
-import { userProfiles, userProfilesFromDatabase } from "@/lib/db-testes";
-import Link from "next/link";
+import { cookies } from "next/headers";
+import { getUser, getUserProfile } from "@/lib/db/select";
+import { prisma } from "@/lib/db/prisma";
 
-export default async function LayoutCliente({ children, params }) {
+export default async function LayoutCliente({ children, params, searchParams }) {
 
-    ///buscar user
-    const user = userProfilesFromDatabase[0]
+    ///simulando login, acessar dados dos usuarios por getServerSession depois
+    const cookieStore = await cookies()
+    const userEmailFromCookies = cookieStore.get("userEmail")?.value
 
-    const userRole = "arquiteto"
-    ///com base no user buscar os recursos
+    ///selecionar os ids se precisar
+    // console.log(await prisma.user.findMany({ select: { id: true, email: true } }))
 
-    const links = linksForSideBar.find((item) => item.role === userRole).links
+    ///buscar user com profile
+    const user = await getUser(userEmailFromCookies)
+    const userType = user.userType
+
+    //selecionando menu apropriado
+    const links = linksForSideBar.find((item) => item.role === userType).links
 
     return (
         <div className="row">
-            <MainSideBar links={links} role={userRole} user={user} />
+            <MainSideBar links={links} role={userType} user={user} />
 
             <div className="col-lg-10">
                 {children}

@@ -1,23 +1,17 @@
 import ProjetosGrid from "@/components/area-logada/projetos/projetos-grid"
-import { etapasProjetosFromDatabase, projetosFromDatabase, usersFromDatabase } from "@/lib/db-testes"
-import Link from "next/link"
+import getProjeto from "@/lib/db/select";
 
 export default async function ProjetoSlugPage({ params }) {
-    ///buscando usar através da sessão
-    const user =  usersFromDatabase[0]
+    const { projetoSlug } = await params;
 
-    ///buscando slug através dos params
-    const { projetoSlug } = await params
+    ///buscar projeto por slug
+    const projeto = await getProjeto(projetoSlug)
 
-    ///buscar projeto na database
-    const projeto = projetosFromDatabase.find((projeto) => projeto.slug === projetoSlug)
-
-    ///etapas
-    const etapas = etapasProjetosFromDatabase.filter((item) => item.projeto_id === projeto.id)
+    ///fazer checagem se usuario logado pode ver dados do projeto, depois
 
     return (
         <>
-        <ProjetosGrid user={user} projeto={projeto} etapas={etapas} />
+            <ProjetosGrid tipo_usuario={"cliente"} user={null} projeto={projeto} />
 
 
         </>

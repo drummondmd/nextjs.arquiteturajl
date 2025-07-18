@@ -1,17 +1,16 @@
-import HubGrid from "@/components/area-logada/hub-grid"
-import { orcamentosFromDatabase, usersFromDatabase } from "@/lib/db-testes"
+import TableOrcamentos from "@/components/area-logada/orcamentos/table-orcamentos"
+import { getUserCompleto } from "@/lib/db/select"
+import { cookies } from "next/headers"
 
-export default function OrcamentoCliente() {
+export default async function OrcamentoCliente() {
+    ///simulando login, acessar dados dos usuarios por getServerSession depois
+    const cookieStore = await cookies()
+    const userEmailFromCookies = cookieStore.get("userEmail")?.value
 
-    //
-    const user = usersFromDatabase[0]
-
-
-
-    ///
-    const orcamentos = orcamentosFromDatabase.filter((elem)=> elem.cliente_id === user.id )
+    ///buscar user
+    const user = await getUserCompleto(userEmailFromCookies)
 
     return (
-        <HubGrid role={"cliente"} referencia={"orcamentos"} user={user} descricao={"Orçamentos"} fotos={null} itens={orcamentos} />
+        <TableOrcamentos tipo_usuario={"cliente"} user={user} />
     )
 }

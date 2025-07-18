@@ -1,14 +1,20 @@
-import HubGrid from "@/components/area-logada/hub-grid"
-import { orcamentosFromDatabase, usersFromDatabase } from "@/lib/db-testes"
+import OrcamentoArqGrid from "@/components/area-logada/arquiteto/orcamento-arq-grid";
+import { prisma } from "@/lib/db/prisma";
+import normalizePrismaData from "@/lib/utilis/normalize-prisma";
 
-export default function OrcamentosArquiteto() {
+export default async function OrcamentosArquiteto() {
 
-    const user = usersFromDatabase[0]
+    const rawOrcamentos = await prisma.budget.findMany({
+        include: {
+            client: { select: { profile: { select: {
+                firstName: true,
+                lastName: true,
+            }}}}
+        }
+    })
+const orcamentos = normalizePrismaData(rawOrcamentos)
 
-    const orcamentos = orcamentosFromDatabase
+return <OrcamentoArqGrid orcamentos={orcamentos} />
 
-    return (
-        <HubGrid descricao={"Orçamentos"} role={"arquiteto"} referencia={"orcamentos"} itens={orcamentos}  />
 
-)
 }

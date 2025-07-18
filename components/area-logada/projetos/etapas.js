@@ -1,6 +1,8 @@
+import { formatarDataBR } from "@/lib/utilis/formatDate"
 import { Fragment } from "react"
 
-export default function EtapasProjeto({ etapas }) {
+export default function EtapasProjetoCliente({ etapas }) {
+
     return (
 
         <div className="container my-4">
@@ -15,29 +17,30 @@ export default function EtapasProjeto({ etapas }) {
                     </tr>
                 </thead>
                 <tbody>
+                    {etapas.length === 0 && <tr><td colSpan={"4"}>Nenhuma etapa registrada</td></tr>}
                     {etapas.map((etapa, index) => (
-                        <Fragment key={etapa.id || `${etapa.nome}-${index}`}>
+                        <Fragment key={etapa.id || `${etapa.name}-${index}`}>
                             <tr className="text-center">
-                                <td className="fw-medium">{etapa.nome}</td>
+                                <td className="fw-medium">{etapa.name}</td>
                                 <td>
                                     <span
                                         className={`badge rounded-pill ${etapa.status === "Concluído"
-                                                ? "bg-success"
-                                                : etapa.status === "Em andamento"
-                                                    ? "bg-warning text-dark"
-                                                    : "bg-secondary"
+                                            ? "bg-success"
+                                            : etapa.status === "Em andamento"
+                                                ? "bg-warning text-dark"
+                                                : "bg-secondary"
                                             }`}
                                     >
                                         {etapa.status}
                                     </span>
                                 </td>
-                                <td>{etapa.data_inicio || "-"}</td>
-                                <td>{etapa.data_prevista_fim || "-"}</td>
+                                <td>{formatarDataBR(etapa.startDate) || "-"}</td>
+                                <td>{formatarDataBR(etapa.expectedEndDate) || "-"}</td>
                             </tr>
                             {etapa.observacao && (
                                 <tr>
                                     <td colSpan="4" className="bg-light small text-muted px-4 py-2">
-                                        <strong>Observações:</strong> {etapa.observacao}
+                                        <strong>Observações:</strong> {etapa.notes}
                                     </td>
                                 </tr>
                             )}

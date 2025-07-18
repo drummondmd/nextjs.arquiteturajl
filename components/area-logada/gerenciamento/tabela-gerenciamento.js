@@ -2,104 +2,98 @@
 
 import { Fragment, useState } from "react"
 import classes from "./tabela-gerenciamento.module.css"
+import { formatarDataBR } from "@/lib/utilis/formatDate";
 
-export default function TabelaGerenciamento({ user, etapas, projeto }) {
+export default function TabelaGerenciamento({ user, projeto }) {
+    const etapas = projeto.constructionPhases;
 
     function TableRow({ etapa }) {
-        const [expandir, setExpandir] = useState(false)
+        const [expandir, setExpandir] = useState(false);
 
         return (
-            <Fragment key={etapa.id} >
-                {/* etapas,detalheas,subetapas e detalhes de subetapas */}
-                <tr className={`${classes[etapa.status]}`}>
-                    <td><button onClick={() => setExpandir(!expandir)}>Expandir</button></td>
-                    <td>{etapa.nome_etapa}</td>
-                    <td>{etapa.status}</td>
-                    <td>{etapa.data_inicio}</td>
-                    <td>{etapa.data_prevista_fim}</td>
-                    <td><button>Finalizar</button><button>Em andamento</button><button>cancelar</button></td>
+            <Fragment key={etapa.id}>
+                <tr className={`table-${etapa.status === "concluído" ? "success" : etapa.status === "em andamento" ? "warning" : "secondary"}`}>
+                    <td className="text-center">
+                        <button className="btn btn-sm btn-outline-secondary" onClick={() => setExpandir(!expandir)}>
+                            <i className={`bi ${expandir ? "bi-chevron-double-up" : "bi-chevron-double-down"}`}></i>
+                        </button>
+                    </td>
+                    <td>{etapa.name}</td>
+                    <td><span className="badge bg-primary">{etapa.status}</span></td>
+                    <td>{formatarDataBR(etapa.startDate)}</td>
+                    <td>{formatarDataBR(etapa.expectedEndDate)}</td>
+                    <td><ButtonAction /></td>
                 </tr>
-                {expandir &&
+
+                {expandir && (
                     <>
-                        {etapa.observacoes && <tr style={{backgroundColor:"grey"}}><td colSpan={"6"}>Observação:{etapa.observacoes}</td></tr>}
-                        {etapa.orcamento && <tr style={{backgroundColor:"grey"}}><td colSpan={"6"}>Orçamento: {etapa.orcamento}</td></tr>}
-                        {etapa.subEtapas.length > 0 &&
-                            <Fragment>
-                                <tr><td colSpan={"2"}><strong>Subetapas:</strong></td></tr>
-                                {etapa.subEtapas.map((subetapa) => {
-                                    return (
-                                        <Fragment key={subetapa.id}>
-                                            <tr className={classes[subetapa.status]}>
-                                                <td style={{backgroundColor:"white"}}></td>
-                                                <td>{subetapa.nome_subitem}</td>
-                                                <td>{subetapa.status}</td>
-                                                <td>{subetapa.data_inicio}</td>
-                                                <td>{subetapa.data_prevista_fim}</td>
-                                                <td>Funções</td>
+                        {etapa.tasks?.length > 0 && (
+                            <>
+                                <tr className="table-light">
+                                    <td colSpan="6"><strong>Tarefas:</strong></td>
+                                </tr>
+                                {etapa.tasks.map(subetapa => (
+                                    <Fragment key={subetapa.id}>
+                                        <tr className={`table-${subetapa.status === "concluído" ? "success" : subetapa.status === "em andamento" ? "warning" : "secondary"}`}>
+                                            <td></td>
+                                            <td>{subetapa.name}</td>
+                                            <td><span className="badge bg-secondary">{subetapa.status}</span></td>
+                                            <td>{formatarDataBR(subetapa.startDate)}</td>
+                                            <td>{formatarDataBR(subetapa.expectedEndDate)}</td>
+                                            <td><ButtonAction /></td>
+                                        </tr>
+                                        {subetapa.notes && (
+                                            <tr className="bg-white">
+                                                <td></td>
+                                                <td colSpan="5" className="text-muted">{subetapa.notes}</td>
                                             </tr>
-                                            <tr className={classes[subetapa.status]}>
-                                                <td style={{backgroundColor:"white"}}></td>
-                                                <td colSpan={"6"}>{subetapa.observacoes}</td>
-
-                                            </tr>
-                                        </Fragment>
-                                    )
-
-                                })}
-                            </Fragment>
-                        }
-
-
-
-
-
-
-
+                                        )}
+                                    </Fragment>
+                                ))}
+                            </>
+                        )}
                     </>
-                }
-                <tr><td></td></tr>
-
-
-
-
-
-
+                )}
             </Fragment>
+        );
+    }
 
-        )
-
-
-
-
-
-
+    function ButtonAction() {
+        return (
+            <div className="btn-group" role="group">
+                <button className="btn btn-sm btn-outline-success" title="Concluir">
+                    <i className="bi bi-check2-circle"></i>
+                </button>
+                <button className="btn btn-sm btn-outline-warning" title="Iniciar">
+                    <i className="bi bi-play-fill"></i>
+                </button>
+                <button className="btn btn-sm btn-outline-danger" title="Cancelar">
+                    <i className="bi bi-x-circle"></i>
+                </button>
+            </div>
+        );
     }
 
     return (
-        <div>
-            <table className="" cellPadding={"10"} style={{borderCollapse:"separate",borderSpacing:"1px"}}>
-                <thead>
+        <div className="table-responsive">
+            <table className="table table-striped table-hover align-middle">
+                <thead className="table-dark">
                     <tr>
-                        <td></td>
-                        <td>Etapa:</td>
-                        <td>Status</td>
-                        <td>Data Inicio</td>
-                        <td>Data Prevista de Finalização </td>
-                        <td>Funções</td>
+                        <th style={{ width: "5%" }}></th>
+                        <th>Etapa</th>
+                        <th>Status</th>
+                        <th>Início</th>
+                        <th>Previsão de Término</th>
+                        <th>Funções</th>
                     </tr>
                 </thead>
                 <tbody>
-
-
-                    {etapas.map((etapa, index) => <TableRow key={etapa.id} etapa={etapa} />)}
-
-
+                    {etapas.map(etapa => (
+                        <TableRow key={etapa.id} etapa={etapa} />
+                    ))}
                 </tbody>
-
-
-
-
             </table>
         </div>
-    )
+    );
 }
+

@@ -1,15 +1,20 @@
+import HubGridProjetos from "@/components/area-logada/hub-grid";
 import HubGrid from "@/components/area-logada/hub-grid";
 import { projetosFromDatabase, users, usersFromDatabase } from "@/lib/db-testes";
+import { getProjetos, getUser, getUserCompleto } from "@/lib/db/select";
+import { cookies } from "next/headers";
+import { use } from "react";
 
-export default function ProjetoCliente() {
+export default async function ProjetosCliente() {
 
-    ////busar usuario da sessão,usando o primeiro para teste
-    const user = usersFromDatabase[0]
+    ///simulando login, acessar dados dos usuarios por getServerSession depois
+    const cookieStore = await cookies()
+    const userEmailFromCookies = cookieStore.get("userEmail")?.value
 
-    ///buscar projetos do usuario
-    const projetos  =  projetosFromDatabase.filter((projeto) => projeto.cliente_id === user.id)
+    ///buscar user
+    const userData = await getUserCompleto(userEmailFromCookies)
 
     return (
-        <HubGrid role={"cliente"} referencia={"projetos"} user={user} descricao={"Projetos"} fotos={null} itens={projetos} />
+        <HubGridProjetos role={"cliente"}  userData={userData} />
     )
 }

@@ -4,36 +4,59 @@ import { useState } from "react"
 import TabelaGerenciamento from "./tabela-gerenciamento"
 import StatusGerenciamento from "./status"
 import CalendarioGerenciamento from "./calendario"
+import HorizontalTab from "../horizontal-tab"
+import DetalhadoGerenciamento from "./detalhado"
 
-export default function GerenciamentoGrid({user,projeto,etapas}){
-    const [display,setDisplay] = useState("tabela")
+export default function GerenciamentoGrid({ user, projeto }) {
+  const [display, setDisplay] = useState("Resumo")
 
-
-    return (
-        <>
-            <div>
-                <h1>{projeto.titulo}</h1>
-                {/* buscar cliente atraves de midlleware depois */}
-                <h5>{projeto.proprietário}</h5>
-                <h1>Página de gerenciamento de Obra</h1>
-            </div>
-            <div>
-                <button onClick={() =>setDisplay("tabela")}>Tabela</button>
-                <button onClick={() =>setDisplay("status")}>Status</button>
-                <button onClick={() =>setDisplay("calendario")}>Calendario</button>
-                <button onClick={() =>setDisplay("orcamento")}>Orçamento</button>
-                <button>Outro</button>
-            </div>
-            <div>
-                {display == "tabela" && <TabelaGerenciamento user={user} projeto={projeto} etapas={etapas} />}
-                {display == "orcamento" && <p>Orçamento</p>}
-                {display == "status" && <StatusGerenciamento user={user} projeto={projeto} etapas={etapas} />}
-                {display == "calendario" && <CalendarioGerenciamento user={user} projeto={projeto} etapas={etapas} />}
+  const arrayOfTabs = [{ nome: "Resumo" }, { nome: "Detalhado" }, { nome: "Status" }, { nome: "Calendário" }, { nome: "Orçamento" }]
 
 
-            </div>
+  return (
+    <div className="px-2 py-4">
+      <header className="mb-4 border-bottom pb-3">
+        <h1 className="display-4">{projeto.title}</h1>
+        <h2 className="mt-4 fw-semibold text-muted">Página de gerenciamento de Obra</h2>
+      </header>
 
+      <section className="mb-4">
+        <HorizontalTab
+          arrayOfTabs={arrayOfTabs}
+          display={display}
+          setDisplay={setDisplay}
+        />
+      </section>
 
-        </>
-    )
+      <main>
+        {display === "Resumo" && (
+          <div className="bg-light p-3 rounded shadow-sm">
+            <TabelaGerenciamento
+              user={user}
+              projeto={projeto}
+            />
+          </div>
+        )}
+        {display === "Orçamento" && (
+          <p className="fs-5 text-secondary">Orçamento</p>
+        )}
+        {display === "Status" && (
+          <StatusGerenciamento
+            user={user}
+            projeto={projeto}
+            etapas={projeto.constructionPhases}
+          />
+        )}
+        {display === "Calendário" && (
+          <CalendarioGerenciamento
+            user={user}
+            projeto={projeto}
+            etapas={projeto.constructionPhases}
+          />
+        )}
+        {display === "Detalhado" && <DetalhadoGerenciamento user={user} projeto={projeto} />}
+      </main>
+    </div>
+  );
+
 }
