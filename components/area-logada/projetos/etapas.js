@@ -1,5 +1,6 @@
 import { formatarDataBR } from "@/lib/utilis/formatDate"
 import { Fragment } from "react"
+import StatusBadge from "../gerenciamento/statusBadge"
 
 export default function EtapasProjetoCliente({ etapas }) {
 
@@ -22,18 +23,7 @@ export default function EtapasProjetoCliente({ etapas }) {
                         <Fragment key={etapa.id || `${etapa.name}-${index}`}>
                             <tr className="text-center">
                                 <td className="fw-medium">{etapa.name}</td>
-                                <td>
-                                    <span
-                                        className={`badge rounded-pill ${etapa.status === "Concluído"
-                                            ? "bg-success"
-                                            : etapa.status === "Em andamento"
-                                                ? "bg-warning text-dark"
-                                                : "bg-secondary"
-                                            }`}
-                                    >
-                                        {etapa.status}
-                                    </span>
-                                </td>
+                                <td><StatusBadge status={etapa.status} /></td>
                                 <td>{formatarDataBR(etapa.startDate) || "-"}</td>
                                 <td>{formatarDataBR(etapa.expectedEndDate) || "-"}</td>
                             </tr>
