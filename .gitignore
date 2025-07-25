@@ -41,3 +41,6 @@ yarn-error.log*
 next-env.d.ts
 
 /generated/prisma
+
+#json de autenticação google
+charged-garden-466717-p4-e1df4ec0e4b5.json
