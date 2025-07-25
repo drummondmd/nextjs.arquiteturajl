@@ -1,15 +1,49 @@
 'use server'
 
-import { uploadFileToDrive } from "../../lib/google-drive/uploadFile";
+import { uploadToCloudinary } from "../../lib/cloudinary/upload";
+import { insertDocumentsInfo } from "../../lib/db/create";
 
-export async function addFileToDriveAndDB(prev, formData) {
+///todo( melhorar validação depois.)
+////Adicionar arquivos na cloudnary e posteriormente adicionando a db.
+export async function addFileToCloudnaryeAndDB(prev, formData) {
 
-    const entradas = Object.fromEntries(formData.entries());
+    const inputs = Object.fromEntries(formData.entries());
 
-    const file = entradas.file
+    ///arquivo, buffer,nome e tipo
+    const file = inputs.file
 
-    const response = await uploadFileToDrive(file)
+    ///validação de erros,
+    if (file.size === 0||inputs.projectId === false) {
+        return { succes: false, message: "Preencha todos os campos,selecione o projeto e anexe o arquivo" }
+    }
 
-    return "Teste com sucesso"
+
+    ////Buffer,tipo,name para db
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    const mimeType = file.type;
+    const filename = file.name;
+
+    try {
+
+        const response = await uploadToCloudinary(buffer, filename, mimeType)
+
+        const secondResponse = await insertDocumentsInfo(inputs, response)
+
+        if (!secondResponse) {
+            throw new Error()
+        }
+
+
+    } catch (error) {
+        console.error("erro ao adicionar a cloud ou db")
+        return { succes: false, message: "Erro ao processar requisição." }
+
+    }
+
+    ///revalidar tags ou path depois.
+    return { succes: true, message: "Documento adicionado com sucesso." }
+
+
 
 }
