@@ -5,8 +5,13 @@ import { FormField, SubmitButton } from "../../components/ui/form-field"
 
 import { useActionState } from "react"
 import generateRandomPassword, { generateToken } from "../../lib/hash/token"
+import { parseISO } from "date-fns"
 
 export default function CriarContaPage() {
+
+
+    // await sendEmail("marceloll2@yahoo.com.br","teste",null,"Teste de envio")
+
 
 
 
@@ -53,7 +58,6 @@ export default function CriarContaPage() {
 
 
     const [state, formAction, isPending] = useActionState(createUserAction.bind(null,"cliente"), {})
-    console.log(state)
 
     return (
         <>
@@ -64,13 +68,13 @@ export default function CriarContaPage() {
                     <FormField required state={state} label={"Sobrenome"} name={"lastName"} type="text" />
                 </div>
 
-                <FormField required state={state} label={"Sexo"} name={"gender"} options={[{ label: "Masculino", value: "masculino" }, { label: "Feminino", value: "feminino" }]} as="radio" required />
+                <FormField required state={state} label={"Sexo"} name={"gender"} options={[{ label: "Masculino", value: "masculino" }, { label: "Feminino", value: "feminino" }]} as="radio" />
                 <FormField required state={state} label="Data de Nascimento" as="date" name={"birthDate"} />
                 <FormField required state={state} label={"CPF"} name={"cpf"} />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField required state={state} label={"Senha"} type="password" name={"password"} />
-                    <FormField required state={state} label={"Confirme sua senha"} type="password" name={"passwordConfirm"} />
+                    <FormField  required state={state} label={"Confirme sua senha"} type="password" name={"passwordConfirm"} />
 
                 </div>
                 {state.success === false && (

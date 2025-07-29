@@ -1,7 +1,7 @@
 
-import { getProjetos, getUser, getUserCompleto } from "@/lib/db/select";
+import { getUserCompleto } from "@/lib/db/select";
 import { cookies } from "next/headers";
-import { use } from "react";
+import HubGridProjetos from "../../../../components/area-logada/hub-grid";
 
 export default async function ProjetosCliente() {
 
