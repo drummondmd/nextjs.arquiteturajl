@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { isSameMonth, isSameYear } from "date-fns";
 import Modal from "../../../ui/modal";
 import { EditFormGeneric } from "../../edit-form-generic";
+import StatusBadge from "../../gerenciamento/statusBadge";
 
 export default function FinanceiroTable({ array, tipo }) {
     const today = new Date()
@@ -75,12 +76,8 @@ export default function FinanceiroTable({ array, tipo }) {
                             <tr key={item.id} className={idx % 2 === 0 ? "bg-white" : "bg-gray-100"}>
                                 <td className="py-1 px-2 border-b">{formatarDataBR(item.dueDate)}</td>
                                 <td className="py-1 px-2 border-b capitalize">
-                                    <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium
-                                        ${item.status === 'pendente' ? 'bg-yellow-100 text-yellow-800' : ''}
-                                        ${item.status === 'pago' ? 'bg-green-100 text-green-800' : ''}
-                                        ${item.status === 'atrasado' ? 'bg-red-100 text-red-800' : ''}
-                                        ${item.status === 'cancelado' ? 'bg-gray-200 text-gray-600' : ''}
-                                    `}>{item.status}</span>
+                                    <StatusBadge item={item} isDropdown table={"payment"} />
+
                                 </td>
                                 <td className="py-1 px-2 border-b  max-w-[120px]">{item.project.title}</td>
                                 <td className="py-1 px-2 border-b  max-w-[120px]">{item.description}</td>
@@ -95,9 +92,11 @@ export default function FinanceiroTable({ array, tipo }) {
         )
     }
 
+
+
     return (
         <div className="max-w-5xl mx-auto p-4">
-            <Modal isOpen={modal} onClose={() => setModal(false)}>
+            <Modal title={"Editar dados do pagamento"} isOpen={modal} onClose={() => setModal(false)}>
                 <EditFormGeneric data={modalData} table={"payment"} />
             </Modal>
             <h2 className="text-2xl font-bold mb-6 text-gray-800">{tipo}</h2>
