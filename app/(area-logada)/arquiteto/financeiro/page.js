@@ -1,6 +1,7 @@
 import FinanceiroTable from "@/components/area-logada/arquiteto/fincanceiro/financeiro-table";
 import { prisma } from "@/lib/db/prisma";
 import normalizePrismaData from "@/lib/utilis/normalize-prisma";
+import Modal from "../../../../components/ui/modal";
 
 export default async function FinanceiroPage() {
 

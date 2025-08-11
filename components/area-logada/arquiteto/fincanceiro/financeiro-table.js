@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button";
 import { isSameMonth, isSameYear } from "date-fns";
+import Modal from "../../../ui/modal";
+import { EditFormGeneric } from "../../edit-form-generic";
 
 export default function FinanceiroTable({ array, tipo }) {
     const today = new Date()
@@ -22,6 +24,8 @@ export default function FinanceiroTable({ array, tipo }) {
 
     const [filteredArray, setFilteredArray] = useState(array);
     const [filtros, setFiltros] = useState({ periodo: mesAtual, status: null })
+    const [modal, setModal] = useState(false);
+    const [modalData, setModalData] = useState();
 
     useEffect(() => {
         let referenceDate = today
@@ -51,6 +55,8 @@ export default function FinanceiroTable({ array, tipo }) {
     ];
 
     function Table({ filteredArray }) {
+
+
         return (
             <div className="overflow-x-auto rounded-lg shadow mt-4 max-w-full">
                 <table className="min-w-[420px] max-w-full w-full bg-white border border-gray-200 text-s">
@@ -61,6 +67,7 @@ export default function FinanceiroTable({ array, tipo }) {
                             <th className="py-2 px-2 text-left font-semibold">Projeto</th>
                             <th className="py-2 px-2 text-left font-semibold">Descrição</th>
                             <th className="py-2 px-2 text-left font-semibold">Valor</th>
+                            <th className="py-2 px-2 text-left font-semibold"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,6 +85,8 @@ export default function FinanceiroTable({ array, tipo }) {
                                 <td className="py-1 px-2 border-b  max-w-[120px]">{item.project.title}</td>
                                 <td className="py-1 px-2 border-b  max-w-[120px]">{item.description}</td>
                                 <td className="py-1 px-2 border-b">{formatMoney(item.amount)}</td>
+                                <td><button onClick={() => { setModal(true), setModalData(item) }}>Editar</button></td>
+
                             </tr>
                         ))}
                     </tbody>
@@ -88,6 +97,9 @@ export default function FinanceiroTable({ array, tipo }) {
 
     return (
         <div className="max-w-5xl mx-auto p-4">
+            <Modal isOpen={modal} onClose={() => setModal(false)}>
+                <EditFormGeneric data={modalData} table={"payment"} />
+            </Modal>
             <h2 className="text-2xl font-bold mb-6 text-gray-800">{tipo}</h2>
             <div className="flex flex-wrap gap-4 mb-6">
                 <DropdownMenu>
@@ -110,7 +122,7 @@ export default function FinanceiroTable({ array, tipo }) {
                         <Button variant="outline" className="rounded px-4 py-2 border border-gray-300 bg-white hover:bg-gray-50">Status</Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="rounded shadow-lg bg-white border border-gray-200">
-                        <DropdownMenuItem onClick={() => setFiltros({ ...filtros, status:null })}>Todos</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setFiltros({ ...filtros, status: null })}>Todos</DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={() => setFiltros({ ...filtros, status: "pendente" })}>Pendente</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => setFiltros({ ...filtros, status: "pago" })}>Pago</DropdownMenuItem>

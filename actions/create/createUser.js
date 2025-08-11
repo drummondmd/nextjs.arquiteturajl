@@ -130,7 +130,7 @@ export default async function createUserAction(userType, currentState, formData)
 
 
     ///nodemailer
-    const html = htmlNewUser(isAdminCreate, inputs.firstName, inputs.lastName, tempPassword, token)
+    const html = htmlNewUser(isAdminCreate, inputs.firstName, inputs.lastName, tempPassword, token,inputs.email)
     sendEmail(inputs.email, "Cadastro de Usuário", html, "Usuário cadastrado com sucesso.")
 
 
