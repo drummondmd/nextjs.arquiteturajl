@@ -13,12 +13,13 @@ export function FormField({
     required = false,
     disabled = false,
     error = '',
-    options = [],         // usado para select ou radio
+    options = [],         // usado para select ou radio {label:"",value:""}
     icon = null,          // JSX opcional
     as = 'input',         // input | textarea | select | file | radio | date
     className = '',
     state,
-    defaultValue = state?.payload ? state.payload.get(name) : ""
+    defaultValue = state?.payload ? state.payload.get(name) : "",
+    register
 
 }) {
     const [showPassword, setShowPassword] = useState(false);
@@ -115,7 +116,8 @@ export function FormField({
         required,
         disabled,
         className: baseInputClasses,
-        defaultValue
+        defaultValue,
+        register
     });
 
     return (

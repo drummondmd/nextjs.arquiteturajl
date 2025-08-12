@@ -2,6 +2,7 @@ import FinanceiroTable from "@/components/area-logada/arquiteto/fincanceiro/fina
 import { prisma } from "@/lib/db/prisma";
 import normalizePrismaData from "@/lib/utilis/normalize-prisma";
 import Modal from "../../../../components/ui/modal";
+import Link from "next/link";
 
 export default async function FinanceiroPage() {
 
@@ -24,9 +25,13 @@ export default async function FinanceiroPage() {
     return (<div className="container py-4">
         <div className="d-flex justify-content-between align-items-center mb-4">
             <h4 className="mb-0 text-capitalize">Financeiro</h4>
-            <button className="btn btn-success btn-sm">
-                <i className="bi bi-plus-lg me-1"></i>Inserir novo
-            </button>
+
+            <Link href={"/arquiteto/financeiro/new-payment"}>
+                <button className="btn btn-success btn-sm">
+                    <i className="bi bi-plus-lg me-1"></i>Inserir novo
+                </button>
+
+            </Link>
         </div>
         <div className="row">
             <div className="col-lg-6">
@@ -38,7 +43,7 @@ export default async function FinanceiroPage() {
 
         </div>
 
-    </div>
+    </div >
 
     );
 }
