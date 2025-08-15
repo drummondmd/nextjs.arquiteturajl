@@ -1,4 +1,5 @@
 import { formatarDataBR } from "@/lib/utilis/formatDate";
+import Link from "next/link";
 import { Fragment } from "react";
 
 export default function DocumentosGrid({ arrayOfDocuments, role }) {
@@ -11,6 +12,19 @@ export default function DocumentosGrid({ arrayOfDocuments, role }) {
 
         return (
             <div className="table-responsive mt-4">
+                {role === "arquiteto" && (
+                    <Link href={"/arquiteto/documentos/add"}>
+                        <button className="btn btn-secondary p-2 mb-2">Adionar novo documento
+                        </button>
+                    </Link>
+
+                )}
+
+
+
+
+
+
                 <table className="table table-hover table-bordered align-middle shadow-sm">
                     <thead className="table-primary text-center">
                         <tr>
@@ -60,16 +74,6 @@ export default function DocumentosGrid({ arrayOfDocuments, role }) {
 
     }
 
-    function Arquiteto({ arrayOfDocuments }) {
-
-
-    }
-
-
-    if (role === "arquiteto") {
-        return <Arquiteto arrayOfDocuments={arrayOfDocuments} />
-    } else {
-        return <Cliente arrayOfDocuments={arrayOfDocuments} />
-    }
-
+    return <Cliente arrayOfDocuments={arrayOfDocuments} />
 }
+

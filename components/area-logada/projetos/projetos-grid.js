@@ -47,7 +47,7 @@ export default function ProjetosGrid({ user, projeto, tipo_usuario }) {
       <div className="mt-4">
         {display === "Etapas" && <EtapasProjetoCliente etapas={projeto.designPhases} />}
 
-        {display === "Documentos" && <DocumentosGrid arrayOfDocuments={projeto.documents} role={"cliente"} />}
+        {display === "Documentos" && <DocumentosGrid arrayOfDocuments={projeto.documents} role={tipo_usuario || "cliente"} />}
         {display === "Pagamentos" && (
           <div>
             <table className="table table-striped">

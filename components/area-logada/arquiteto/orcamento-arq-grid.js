@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import HorizontalTab from "../horizontal-tab";
+import Link from "next/link";
+import StatusBadge from "../gerenciamento/statusBadge";
 
 export default function OrcamentoArqGrid({ orcamentos }) {
 
@@ -11,14 +13,16 @@ export default function OrcamentoArqGrid({ orcamentos }) {
 
     const displayTab = orcamentos.filter((orcamento) => orcamento.status === display);
 
-
     return (
         <div className="container py-4">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h4 className="mb-0 text-capitalize">Orçamentos</h4>
-                <button className="btn btn-success btn-sm">
-                    <i className="bi bi-plus-lg me-1"></i>Novo Orçamento
-                </button>
+                <Link href={"/arquiteto/orcamentos/novo-orcamento"}>
+                    <button className="btn btn-success btn-sm">
+                        <i className="bi bi-plus-lg me-1"></i>Novo Orçamento
+                    </button>
+                </Link>
+
             </div>
             <div className="mb-3">
                 <HorizontalTab arrayOfTabs={arrayOfTabs} display={display} setDisplay={setDisplay} />
@@ -48,12 +52,12 @@ export default function OrcamentoArqGrid({ orcamentos }) {
                                                 {orcamento.totalValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                                             </td>
                                             <td>
-                                                {orcamento.client.profile.firstName + " " + orcamento.client.profile.lastName}
+                                                {orcamento.client && orcamento.client?.profile.firstName + " " + orcamento.client?.profile.lastName}
+                                                {!orcamento.client && "Cliente não definido"}
+
                                             </td>
                                             <td className="text-center">
-                                                <button className="btn btn-outline-primary btn-sm">
-                                                    Mudar Status
-                                                </button>
+                                                <StatusBadge item={orcamento} isDropdown={true} table={"budget"} />
                                             </td>
                                         </tr>
                                     ))}

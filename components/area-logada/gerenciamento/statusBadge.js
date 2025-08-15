@@ -9,13 +9,15 @@ export default function StatusBadge({ status, isDropdown, item, table }) {
 
     // Tailwind color classes for each status
     let colors = {
-        "concluido": "bg-emerald-500 text-white",
+        "concluido": "bg-emerald-500 text-white hover:text-black",
         "pago": "bg-emerald-500 text-white",
+        "aceito": "bg-emerald-500 text-white hover:text-black",
         "em_andamento": "bg-yellow-500 text-white",
         "pendente": "bg-yellow-500 text-white",
         "planejado": "bg-stone-500 text-white",
         "cancelado": "bg-pink-600 text-white",
         "atrasado": "bg-red-500 text-white",
+        "rejeitado": "bg-red-500 text-white",
     }
 
     const badgeClass = `inline-block px-3 py-1 rounded-full text-xs font-semibold shadow-sm capitalize transition-colors duration-200 ${colors[status] || 'bg-gray-300 text-gray-700'}`;
@@ -25,7 +27,7 @@ export default function StatusBadge({ status, isDropdown, item, table }) {
     }
 
     const tableCheatSheet = [
-        { table: "Budget", enum: ["enviado", "aceito", "rejeitado", "cancelado"] },
+        { table: "budget", enum: ["enviado", "aceito", "rejeitado", "cancelado"] },
         { table: "payment", enum: ["pendente", "pago", "atrasado", "cancelado"] }
     ]
     const itensOfDd = tableCheatSheet.find((elem) => elem.table === table)?.enum || [];

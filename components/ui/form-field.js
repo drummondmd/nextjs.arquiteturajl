@@ -8,7 +8,7 @@ export function FormField({
     name,
     type = 'text',
     placeholder = '',
-    value,
+    value, // <-- Garante que nunca será undefined
     onChange,
     required = false,
     disabled = false,
@@ -18,7 +18,8 @@ export function FormField({
     as = 'input',         // input | textarea | select | file | radio | date
     className = '',
     state,
-    defaultValue = state?.payload ? state.payload.get(name) : "",
+    defaultValue,
+    // defaultValue = state?.payload ? state.payload.get(name) : "",
     register
 
 }) {
@@ -71,7 +72,7 @@ export function FormField({
                                 name={name}
                                 value={opt.value}
 
-                                defaultChecked={defaultValue == opt.value ? true : false}
+                                // defaultChecked={defaultValue == opt.value ? true : false}
                                 // checked={value === opt.value}
                                 onChange={onChange}
                                 required={required}
@@ -110,7 +111,7 @@ export function FormField({
     const commonProps = () => ({
         id: name,
         name,
-        value,
+        value: defaultValue ? undefined : value ?? "",
         placeholder,
         onChange,
         required,
@@ -118,19 +119,19 @@ export function FormField({
         className: baseInputClasses,
         defaultValue,
         register
-    });
+});
 
-    return (
-        <div className={`mb-4 ${className}`}>
-            {label && (
-                <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
-                    {label} {required && <span className="text-red-500">*</span>}
-                </label>
-            )}
-            {renderField()}
-            {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
-        </div>
-    );
+return (
+    <div className={`mb-4 ${className}`}>
+        {label && (
+            <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
+                {label} {required && <span className="text-red-500">*</span>}
+            </label>
+        )}
+        {renderField()}
+        {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
+    </div>
+);
 }
 
 export function SubmitButton({

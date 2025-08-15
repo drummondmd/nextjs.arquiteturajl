@@ -16,6 +16,7 @@ import { isSameMonth, isSameYear } from "date-fns";
 import Modal from "../../../ui/modal";
 import { EditFormGeneric } from "../../edit-form-generic";
 import StatusBadge from "../../gerenciamento/statusBadge";
+import { SquarePen } from "lucide-react";
 
 export default function FinanceiroTable({ array, tipo }) {
     const today = new Date()
@@ -74,15 +75,15 @@ export default function FinanceiroTable({ array, tipo }) {
                     <tbody>
                         {filteredArray.map((item, idx) => (
                             <tr key={item.id} className={idx % 2 === 0 ? "bg-white" : "bg-gray-100"}>
-                                <td className="py-1 px-2 border-b">{formatarDataBR(item.dueDate)}</td>
-                                <td className="py-1 px-2 border-b capitalize">
+                                <td className="py-1 px-1 border-b">{formatarDataBR(item.dueDate)}</td>
+                                <td className="py-1 px-1 border-b capitalize">
                                     <StatusBadge item={item} isDropdown table={"payment"} />
 
                                 </td>
-                                <td className="py-1 px-2 border-b  max-w-[120px]">{item.project.title}</td>
-                                <td className="py-1 px-2 border-b  max-w-[120px]">{item.description}</td>
-                                <td className="py-1 px-2 border-b">{formatMoney(item.amount)}</td>
-                                <td><button onClick={() => { setModal(true), setModalData(item) }}>Editar</button></td>
+                                <td className="py-1 px-1 border-b  max-w-[120px]">{item.project.title}</td>
+                                <td className="py-1 px-1 border-b  max-w-[120px]">{item.description}</td>
+                                <td className="py-1 px-1 border-b">{formatMoney(item.amount)}</td>
+                                <td className="py-1 px-1 border-b"><button onClick={() => { setModal(true), setModalData(item) }}><SquarePen /></button></td>
 
                             </tr>
                         ))}

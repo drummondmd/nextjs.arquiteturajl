@@ -3,6 +3,7 @@
 import { useState } from "react";
 import HorizontalTab from "../horizontal-tab";
 import Link from "next/link";
+import StatusBadge from "../gerenciamento/statusBadge";
 
 export default function ProjetoArqGrid({ projetos }) {
 
@@ -17,9 +18,12 @@ export default function ProjetoArqGrid({ projetos }) {
         <div className="container py-4">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h4 className="mb-0 text-capitalize">Projetos</h4>
-                <button className="btn btn-success btn-sm">
-                    <i className="bi bi-plus-lg me-1"></i>Novo Projeto
-                </button>
+                <Link href={"/arquiteto/projetos/add"}>
+                    <button className="btn btn-success btn-sm">
+                        <i className="bi bi-plus-lg me-1"></i>Novo Projeto
+                    </button>
+                </Link>
+
             </div>
             <div className="mb-3">
                 <HorizontalTab arrayOfTabs={arrayOfTabs} display={display} setDisplay={setDisplay} />
@@ -37,7 +41,7 @@ export default function ProjetoArqGrid({ projetos }) {
                                     <tr>
                                         <th>Nome</th>
                                         <th>Cliente</th>
-                                        <th>Mudar Status</th>
+                                        <th>Status</th>
                                         <th>Acessar detalhes</th>
                                     </tr>
                                 </thead>
@@ -47,18 +51,18 @@ export default function ProjetoArqGrid({ projetos }) {
                                             <td>{projeto.title}</td>
 
                                             <td>
-                                                {projeto.client.profile.firstName + " " + projeto.client.profile.lastName}
+                                                {projeto.client && projeto.client.profile.firstName + " " + projeto.client.profile.lastName}
+                                                {!projeto.client && "Cliente não identificado"}
                                             </td>
                                             <td className="text-center">
-                                                <button className="btn btn-outline-primary btn-sm">
-                                                    Mudar Status
-                                                </button>
+                                                <StatusBadge item={projeto} />
+
                                             </td>
                                             <td className="text-center">
                                                 <Link href={`/arquiteto/projetos/${projeto.slug}`}>
-                                                <button className="btn btn-outline-secondary btn-sm">
-                                                    Acessar detalhes
-                                                </button>
+                                                    <button className="btn btn-outline-secondary btn-sm">
+                                                        Acessar detalhes
+                                                    </button>
                                                 </Link>
                                             </td>
                                         </tr>

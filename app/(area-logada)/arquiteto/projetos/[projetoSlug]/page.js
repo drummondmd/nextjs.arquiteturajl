@@ -6,6 +6,7 @@ export default async function ProjetoSlugPage({ params }) {
 
     ///buscar projeto por slug
     const projeto = await getProjeto(projetoSlug)
+    console.log(projeto)
 
     ///fazer checagem se usuario logado pode ver dados do projeto, depois
 
