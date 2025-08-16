@@ -232,7 +232,6 @@ enum statusBudget {
   enviado
   aceito
   rejeitado
-  cancelado
 }
 
 model ExecutionCostEstimate {

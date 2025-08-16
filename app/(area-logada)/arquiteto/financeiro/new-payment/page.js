@@ -1,5 +1,5 @@
+import NewPaymentForm from "../../../../../components/adicionar-projeto/payments/new-payment-form"
 import { prisma } from "../../../../../lib/db/prisma"
-import NewPaymentClient from "./new-payment-client"
 
 export default async function NewPaymentPage() {
 
@@ -17,6 +17,6 @@ export default async function NewPaymentPage() {
 
 
     return (
-        <NewPaymentClient projects={projects} />
+        <NewPaymentForm projects={projects} />
     )
 }

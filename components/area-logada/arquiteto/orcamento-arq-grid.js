@@ -9,7 +9,7 @@ export default function OrcamentoArqGrid({ orcamentos }) {
 
     const [display, setDisplay] = useState("enviado");
 
-    const arrayOfTabs = [{ nome: "enviado" }, { nome: "aceito" }, { nome: "rejeitado" }, { nome: "cancelado" }]
+    const arrayOfTabs = [{ nome: "enviado" }, { nome: "aceito" }, { nome: "rejeitado" }]
 
     const displayTab = orcamentos.filter((orcamento) => orcamento.status === display);
 
