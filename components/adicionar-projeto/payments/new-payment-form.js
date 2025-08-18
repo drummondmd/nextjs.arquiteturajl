@@ -13,20 +13,13 @@ import createPaymentAction from "../../../actions/create/createPaymentAction"
 ///TODO
 //validação de erros do array depois.
 
-export default function NewPaymentForm({ project, projects, onSubmitParent }) {
+export default function NewPaymentForm({ project, projects, onSubmitParent, defaultValues }) {
 
     ////2 formas de funcionar, diretamente com o projeto ou geral com possibiliade de selecionar projeto
     ///se definir o projeto não preciso avaliar todos projetos.
 
     let isDefaultValues = null;
     let zodArraySchema;
-
-    ///teste
-    let defaultValues = [
-        { projectId: "asdasdasd", paymentType: "entrada", description: "teste", amount: "", status: "enviado", dueDate: "2025-08-16" },
-        { projectId: "asdasdasd", paymentType: "entrada", description: "teste2", amount: "", status: "enviado", dueDate: "2025-08-16" }
-
-    ]
 
     if (defaultValues) {
         isDefaultValues =
@@ -37,7 +30,6 @@ export default function NewPaymentForm({ project, projects, onSubmitParent }) {
             payments: z.array(paymentSchema)
         })
 
-
     }
 
 
@@ -47,10 +39,6 @@ export default function NewPaymentForm({ project, projects, onSubmitParent }) {
         })
 
     }
-
-
-    // console.log(optionsProject
-
 
     const { setError, register, handleSubmit, formState: { errors, isSubmitting }, control } = useForm({
         resolver: zodResolver(zodArraySchema || paymentSchema),
@@ -110,22 +98,26 @@ export default function NewPaymentForm({ project, projects, onSubmitParent }) {
     function FormUnitario({ index }) {
         return (
             <>
-                <input {...register(`payments.${index}.projectId`)} name="projectID" value={project.id} readOnly></input>
-                {/* novo form só registra entrada */}
-                <input {...register(`payments.${index}.paymentType`)} name="paymentType" value={"entrada"} readOnly></input>
-                <input {...register(`payments.${index}.status`)} name="status" value={"pendente"} readOnly></input>
-                <Controller control={control} name={`payments.${index}.description`} render={({ field }) => <FormField error={errors.description?.message} {...field} label={"Descrição"} className="mb-2" />} />
-                <Controller control={control} name={`payments.${index}.amount`} render={({ field }) =>
-                    <FormField {...field}
-                        value={field.value ? field.value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) : ""}
-                        onChange={(e) => {
-                            const raw = e.target.value.replace(/\D/g, "");
-                            const numeric = Number(raw) / 100;
-                            field.onChange(numeric);
-                        }}
-                        type="text" label={"Valor"} className="mb-2" />}
-                />
-                <Controller control={control} name={`payments.${index}.dueDate`} render={({ field }) => <FormField {...field} label={"Data de Vencimento"} type="date" className="mb-2" />} />
+                <div className="border p-4 mb-4 bg-gray-200 rounded">
+                    <input hidden {...register(`payments.${index}.projectId`)} name="projectID" value={project.id} readOnly></input>
+                    {/* novo form só registra entrada */}
+                    <input hidden {...register(`payments.${index}.paymentType`)} name="paymentType" value={"entrada"} readOnly></input>
+                    <input hidden {...register(`payments.${index}.status`)} name="status" value={"pendente"} readOnly></input>
+                    <Controller control={control} name={`payments.${index}.description`} render={({ field }) => <FormField error={errors.description?.message} {...field} label={"Descrição"} className="mb-2" />} />
+                    <Controller control={control} name={`payments.${index}.amount`} render={({ field }) =>
+                        <FormField {...field}
+                            value={field.value ? field.value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) : ""}
+                            onChange={(e) => {
+                                const raw = e.target.value.replace(/\D/g, "");
+                                const numeric = Number(raw) / 100;
+                                field.onChange(numeric);
+                            }}
+                            type="text" label={"Valor"} className="mb-2" />}
+                    />
+                    <Controller control={control} name={`payments.${index}.dueDate`} render={({ field }) => <FormField {...field} label={"Data de Vencimento"} type="date" className="mb-2" />} />
+
+
+                </div>
 
             </>
         )
