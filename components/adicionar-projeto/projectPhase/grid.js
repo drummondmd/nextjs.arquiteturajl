@@ -4,6 +4,7 @@ import { formatDate } from "date-fns"
 import { Fragment, useEffect } from "react";
 import { useState } from "react";
 import { addDaysAndFormatISO } from "../../../lib/utilis/formatDate";
+import NewPhaseForm from "./newPhaseForm";
 
 export default function AddProjectPhaseGrid({ project }) {
 
@@ -130,7 +131,8 @@ export default function AddProjectPhaseGrid({ project }) {
                 <div>
                     <button onClick={inputToForm}>Fazer o formulario</button>
                 </div>
-                <div>
+                <div className="mt-3">
+                    <NewPhaseForm />
 
                 </div>
             </div>
