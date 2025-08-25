@@ -69,11 +69,9 @@ model Project {
   title                 String
   status                statusPhase         @default(planejado)
   projectType           String?
-  developmentType       String?
+  developmentType       String?             @default("interiores")
   investmentExpectation Decimal?
   area                  Decimal?
-  initialBudget         Decimal?
-  expectedBudget        Decimal?
   actualBudget          Decimal?
   createdAt             DateTime?           @default(now())
   startDate             DateTime?
@@ -91,7 +89,6 @@ model Project {
 model ProjectDetail {
   id               String  @id @default(uuid())
   projectId        String  @unique
-  type             String?
   standard         String?
   technicalManager String?
   postalCode       String?
@@ -125,7 +122,7 @@ model ProjectPhaseTask {
   id              String       @id @default(uuid())
   phaseId         String
   name            String
-  status          statusPhase        @default(planejado)
+  status          statusPhase  @default(planejado)
   responsible     String?
   startDate       DateTime?
   expectedEndDate DateTime?
@@ -158,7 +155,7 @@ model ConstructionTask {
   id              String            @id @default(uuid())
   phaseId         String
   name            String
-  status          statusPhase        @default(planejado)
+  status          statusPhase       @default(planejado)
   budget          Decimal?
   actualCost      Decimal?
   startDate       DateTime?
@@ -213,19 +210,19 @@ enum PaymentStatus {
 }
 
 model Budget {
-  id           String    @id @default(uuid())
+  id           String        @id @default(uuid())
   clientId     String?
   totalValue   Decimal
-  status       statusBudget?   @default(enviado)
-  version      Int?      @default(1)
-  sentAt       DateTime? @default(now())
+  status       statusBudget? @default(enviado)
+  version      Int?          @default(1)
+  sentAt       DateTime?     @default(now())
   acceptedAt   DateTime?
   paymentTerms String?
   summary      String?
   notes        String?
   fileUrl      String?
   title        String?
-  client       User?     @relation(fields: [clientId], references: [id])
+  client       User?         @relation(fields: [clientId], references: [id])
 }
 
 enum statusBudget {

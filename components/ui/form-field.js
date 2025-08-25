@@ -8,8 +8,8 @@ export function FormField({
     name,
     type = 'text',
     placeholder = '',
-    value, // <-- Garante que nunca será undefined
-    onChange,
+    value = undefined, // <-- Garante que nunca será undefined
+    onChange = null,
     required = false,
     disabled = false,
     error = '',
@@ -17,10 +17,10 @@ export function FormField({
     icon = null,          // JSX opcional
     as = 'input',         // input | textarea | select | file | radio | date
     className = '',
-    state,
-    defaultValue,
-    // defaultValue = state?.payload ? state.payload.get(name) : "",
-    register
+    state = null,
+    defaultValue = null,
+        // defaultValue = state?.payload ? state.payload.get(name) : "",
+        register = undefined
 
 }) {
     const [showPassword, setShowPassword] = useState(false);
@@ -119,19 +119,19 @@ export function FormField({
         className: baseInputClasses,
         defaultValue,
         register
-});
+    });
 
-return (
-    <div className={`mb-4 ${className}`}>
-        {label && (
-            <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
-                {label} {required && <span className="text-red-500">*</span>}
-            </label>
-        )}
-        {renderField()}
-        {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
-    </div>
-);
+    return (
+        <div className={`mb-4 ${className}`}>
+            {label && (
+                <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
+                    {label} {required && <span className="text-red-500">*</span>}
+                </label>
+            )}
+            {renderField()}
+            {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
+        </div>
+    );
 }
 
 export function SubmitButton({
