@@ -1,8 +1,16 @@
 import { prisma } from "../db/prisma";
 
 export default async function stringForSlug(string: string): Promise<string> {
+
+
+
     const today = new Date()
-    const first = string.trim().replace(/\s/g, "-");
+    const first = string
+    .normalize("NFD") ///para separar letra de acento
+    .replace(/[\u0300-\u036f]/g, '') //retirar acento
+    .toLowerCase()
+    .trim()
+    .replace(/\s/g, "-");//trocar espacos por -
     const second = first + "-" + today.getFullYear();
     const third = crypto.randomUUID()
 

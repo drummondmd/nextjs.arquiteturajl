@@ -6,6 +6,9 @@ import { convertIsoDatesInArrayObjects } from "../../lib/utilis/normalizeDateInA
 import { createManyFunction } from "../../lib/db/create"
 
 export default async function createPhaseAction(table, data) {
+
+    const projectId = data[table][0].projectId
+
     ///tentar fazer para varias tabelas
     const SchemaReference = {
         projectPhase: projectPhaseSchema,
@@ -32,7 +35,6 @@ export default async function createPhaseAction(table, data) {
     try {
         const response = await createManyFunction(table, normalizedData)
         // const response = true
-        console.log(normalizedData)
         if (!response) {
             throw new Error()
         }
@@ -42,8 +44,9 @@ export default async function createPhaseAction(table, data) {
         console.error("Erro ao cadastrar na base de dados")
         return { success: false, message: "Erro na validação de dados do servidor." }
     }
+
     ///revalidar path, depois, ver melhor forma.
-    return { success: true }
+    return { success: true, projectId: projectId }
 
 
 }

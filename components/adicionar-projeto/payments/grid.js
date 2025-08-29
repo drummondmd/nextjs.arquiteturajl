@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link"
-import { useState } from "react"
+import React, { useCallback, useState } from "react"
 import NewPaymentForm from "./new-payment-form";
 import { FormField, SubmitButton } from "../../ui/form-field";
 import { addDays, format, formatDate, parseISO } from "date-fns";
@@ -12,12 +12,49 @@ import { success } from "zod";
 import { useRouter } from "next/navigation";
 import createPaymentAction from "../../../actions/create/createPaymentAction";
 
+function ConstrutorDeForm({ input, setInput }) {
+    return (
+        <div className="col-span-2">
+            <div className="grid grid-cols-2 gap-2">
+                <FormField label={"Valor total"} name={"value"} type="text"
+                    // onChange={(e) => {
+                    //     const raw = e.target.value.replace(/\D/g, "");
+                    //     const numeric = Number(raw) / 100;
+                    //     field.onChange(numeric);
+                    // }}
+                    value={input.value ? input.value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) : " "}
 
-export default function AddPaymentsGrid({ project }) {
-    const router = useRouter()
+                    onChange={(e) => {
+                        const raw = e.target.value.replace(/\D/g, "");
+                        const numeric = Number(raw) / 100;
+                        setInput({ ...input, value: numeric })
+                    }} />
+                <FormField label={"Parcelas"} name={"parcelas"} type="number" value={input.parcelas || " "} onChange={e => setInput({ ...input, parcelas: e.target.value })}
+                />
+
+            </div>
+
+        </div>
+
+
+
+    )
+}
+
+
+export default function AddPaymentsGrid({ project, table }) {
+    const router = useRouter();
+    const links = [
+        { label: "Fases de projeto", table: "projectPhase", link: `/arquiteto/projetos/add/projectPhase?projectId=${project.id}` },
+        { label: "Pagamentos", table: "payments", link: `/arquiteto/projetos/add/payments?projectId=${project.id}` },
+        { label: "Fases de Construção", table: "constructionPhase", link: `/arquiteto/projetos/add/constructionPhase?projectId=${project.id}` }
+    ];
+    const filteredLinks = links.filter((elem) => elem.table !== table);
+    const today = formatDate(new Date(), "yyyy-MM-dd")
+
 
     const [nextStep, setNextStep] = useState(true);
-    const [input, setInput] = useState({ value: 600, parcelas: 1, data: formatDate(new Date(), "yyyy-MM-dd"), })
+    const [input, setInput] = useState({ value: 600, parcelas: 1 })
     const [form, setForm] = useState({
         visible: false,
         defaultValues: null
@@ -34,28 +71,18 @@ export default function AddPaymentsGrid({ project }) {
         } else {
             // toast.success(response.message)
 
-            router.push(`/arquiteto/projetos/add/etapas?projectId=${project.id}`)
+            router.push(`/arquiteto/projetos/add/hub?projectId=${project.id}`)
         }
-
-
         //// se sucesso ir para proxima pagina
 
 
     }
 
-    ////para o input de fazer o form da forma certa
-    function handleInputChange(e) {
-        const valor = e.target.value
-        const inputMod = e.target.name;
-        setInput({
-            ...input, [inputMod]: valor
-        })
-
-    }
-
     ///transformar o input do usuario em default values para o formulario verdadeiro
     function inputInDefaultValues(obj) {
-        const { parcelas, value, data } = obj;
+        const { parcelas, value } = obj;
+        const data = today;
+
         if (parcelas === 1) {
             return [{
                 projectId: project.id,
@@ -66,7 +93,23 @@ export default function AddPaymentsGrid({ project }) {
                 dueDate: data
             }]
         } else {
-            const valorParcela = value / parcelas;
+            ///1 parcela =40%, demais divide igual.
+            const parcelasArray = [];
+            for (let i = 0; i < parcelas; i++) {
+                const primeira = parcelas > 2 ? (value * 4) / 10 : (value * 6) / 10
+                const restante = value - primeira;
+
+                if (i === 0) {
+                    parcelasArray.push(primeira)
+                } else {
+                    parcelasArray.push(restante / (parcelas - 1))
+                }
+
+            }
+
+            // const valorParcela = value / parcelas;
+
+
             const array = [];
             //mais de uma parcela,para cada parcela criar item do array
             for (let i = 0; i < parcelas; i++) {
@@ -75,7 +118,7 @@ export default function AddPaymentsGrid({ project }) {
                     projectId: project.id,
                     paymentType: "entrada",
                     description: `Parcela ${i + 1}/${parcelas} `,
-                    amount: valorParcela,
+                    amount: parcelasArray[i],
                     status: "pendente",
                     dueDate: i === 0 ? data : format(addDays(new Date(data), multiplicador), "yyyy-MM-dd")
                 })
@@ -84,27 +127,47 @@ export default function AddPaymentsGrid({ project }) {
         }
     }
 
-    function ConstrutorDeForm() {
-        return (
-            <div className="grid grid-cols-3 gap-3">
-                <FormField label={"Valor total"} name={"value"} type="text" value={input.value} onChange={handleInputChange} />
-                <FormField label={"Parcelas"} name={"parcelas"} type="number" value={input.parcelas} onChange={handleInputChange} />
-                <button onClick={() => setForm({ defaultValues: inputInDefaultValues(input), visible: true })} className="rounded bg-blue-300 m-4 hover:bg-blue-600">Criar</button>
-            </div>
 
-
-
-        )
-    }
 
     return (
-        <div className="mt-2">
+        <div className="mt-3 max-w-5/6 mx-auto px-2">
             <Toaster richColors />
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                <div>
+                    <h2 className="text-lg font-bold text-gray-800">{project.title}</h2>
+                    <p className="text-sm text-gray-500">{links.find((elem) => elem.table === table)?.label}</p>
+                </div>
+                <div className="flex gap-2">
+                    <button onClick={() => router.back()} className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded transition">Voltar</button>
+                    {filteredLinks.map((elem) => (
+                        <Link key={elem.label} href={elem.link} className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded transition">{elem.label}</Link>
+                    ))}
+                </div>
+            </div>
 
-            <HeaderAddProjetos pagina={"pagamentos"} projeto={project} />
             <div>
                 <div>
-                    {!form.visible && <ConstrutorDeForm />}
+                    {!form.visible && (
+                        <div className="grid grid-cols-3 gap-3">
+                            <ConstrutorDeForm setForm={setForm} input={input} setInput={setInput} />
+                            <button
+                                onClick={() => {
+                                    const isNotValid = Object.values(input).filter((elem) => elem === "" || elem == 0)
+                                    if (isNotValid.length > 0) {
+                                        toast.error("Preencha dados Corretamente")
+                                    } else {
+                                        setForm({ defaultValues: inputInDefaultValues(input), visible: true })
+
+                                    }
+                                }}
+                                className="rounded bg-blue-300 m-4 hover:bg-blue-600"
+                            >Criar</button>
+                        </div>
+
+
+
+                    )
+                    }
                 </div>
 
                 <div>
@@ -113,19 +176,6 @@ export default function AddPaymentsGrid({ project }) {
                 </div>
 
             </div>
-
-
-            <div>
-                <Link href={`/arquiteto/projetos/${project.slug}`}><button className="bg-blue-300 text-white rounded px-2 m-2">Voltar a home do Projeto</button></Link>
-
-                <Link href={`/arquiteto/projetos/add/etapas?projectId=${project.id}`}><button title={!nextStep && "Complete para seguir"} disabled={!nextStep} className="bg-blue-300 text-white rounded px-2">Adicionar Etapas de projetos</button></Link>
-
-
-            </div>
-
-
-
-
 
         </div>
     )

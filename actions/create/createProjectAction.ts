@@ -14,7 +14,7 @@ type ProjectDetailType = z.infer<typeof projectDetailSchema>
 
 
 
-export default async function createProjectAction(data: ProjectAndDetailSchema) {
+export default async function createProjectAction(data: ProjectAndDetailSchema): Promise<{ success: boolean; message: string; projectId?: string; }> {
 
     ///validar dados com zod, se erro já retornar
     const zodResponse = projectAndDetailSchema.safeParse(data)
@@ -85,7 +85,7 @@ export default async function createProjectAction(data: ProjectAndDetailSchema) 
     ///revalidar path
     revalidatePath("/", "layout")
     ///retornar sucesso.
-    return { success: true, message: "Dados enviados com sucesso" }
+    return { success: true, message: "Dados enviados com sucesso", projectId: projecDetailData.projectId }
 
 
 

@@ -19,8 +19,9 @@ export function FormField({
     className = '',
     state = null,
     defaultValue = null,
-        // defaultValue = state?.payload ? state.payload.get(name) : "",
-        register = undefined
+    // defaultValue = state?.payload ? state.payload.get(name) : "",
+    register = undefined,
+    staticForm = false /// prop para determinar se formulario é estatico, não tem mudança de estado.
 
 }) {
     const [showPassword, setShowPassword] = useState(false);
@@ -108,18 +109,28 @@ export function FormField({
         );
     };
 
-    const commonProps = () => ({
-        id: name,
-        name,
-        value: defaultValue ? undefined : value ?? "",
-        placeholder,
-        onChange,
-        required,
-        disabled,
-        className: baseInputClasses,
-        defaultValue,
-        register
-    });
+    const commonProps = () => {
+        const props = {
+            id: name,
+            name,
+            placeholder,
+            onChange,
+            required,
+            disabled,
+            className: baseInputClasses,
+            register
+        };
+        // Se value está definido, não passe defaultValue
+
+        if (defaultValue !== undefined && defaultValue !== null) {
+            props.defaultValue = defaultValue;
+        }
+        else if (value || value === undefined && !staticForm) {
+            props.value = value ?? "";
+            console.log(props.value)
+        }
+        return props;
+    };
 
     return (
         <div className={`mb-4 ${className}`}>

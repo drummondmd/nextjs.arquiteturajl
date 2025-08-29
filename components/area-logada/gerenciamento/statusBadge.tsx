@@ -1,8 +1,9 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
 import updateStatusByBadge from "../../../actions/update/updateStatusByBadge"
+import { statusPhase } from "@prisma/client";
 
 
-export default function StatusBadge({ status, isDropdown, item, table }) {
+export default function StatusBadge({ status, isDropdown, item, table }: { status?: string, isDropdown: boolean, item: any, table: string }) {
     if (!status) {
         status = item.status
     }
@@ -26,9 +27,14 @@ export default function StatusBadge({ status, isDropdown, item, table }) {
         return <span className={badgeClass}>{status}</span>
     }
 
+
+    let enumBase: Array<statusPhase> = ["planejado", "em_andamento", "atrasado", "cancelado", "concluido"]
+
     const tableCheatSheet = [
         { table: "budget", enum: ["enviado", "aceito", "rejeitado", "cancelado"] },
-        { table: "payment", enum: ["pendente", "pago", "atrasado", "cancelado"] }
+        { table: "payment", enum: ["pendente", "pago", "atrasado", "cancelado"] },
+        { table: "projectPhase", enum: ["planejado", "em_andamento", "concluido", "cancelado", "atrasado"] },
+        { table: "project", enum: enumBase }
     ]
     const itensOfDd = tableCheatSheet.find((elem) => elem.table === table)?.enum || [];
 

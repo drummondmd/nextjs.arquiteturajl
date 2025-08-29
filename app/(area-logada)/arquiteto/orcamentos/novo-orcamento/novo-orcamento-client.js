@@ -45,7 +45,7 @@ export default function NovoOrcamentoClient({ users }) {
                     <Controller control={control} name="totalValue"
                         render={({ field }) => <FormField {...field} label={"Valor do orçamento"}
                             error={errors.totalValue?.message}
-                            value={field.value ? field.value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) : ""}
+                            value={field.value ? field.value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) : " "}
                             onChange={(e) => {
                                 const raw = e.target.value.replace(/\D/g, "");
                                 const numeric = Number(raw) / 100;

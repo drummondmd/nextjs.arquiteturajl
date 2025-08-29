@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import z, { safeParse, success } from "zod";
 import { Project, ProjectDetail, User, UserProfile } from "@prisma/client"
 import { Controller, FormProvider, useForm } from "react-hook-form";
@@ -19,22 +19,22 @@ import createProjectAction from "@/actions/create/createProjectAction";
 const schemas = {
     projectSchema: {
         clientId: z.nullish(z.uuid()),
-        title: z.string().min(5),
-        projectType: z.string().min(5),
-        investmentExpectation: z.coerce.number(),
-        area: z.string(),
-        coverUrl: z.file()
+        title: z.string("Digite pelo menos 5 caracteres").min(5,"Digite pelo menos 5 caracteres"),
+        projectType: z.string("Selecione um valor válido").min(5),
+        investmentExpectation: z.coerce.number("Preencha um valor válido"),
+        area: z.string("Preencha o campo corretamente"),
+        coverUrl: z.nullish(z.file())
     },
     projectDetailSchema: {
-        standart: z.string(),
-        postalCode: z.string(),
-        country: z.string(),
-        state: z.string(),
-        city: z.string(),
-        neighborhood: z.string(),
-        street: z.string(),
-        number: z.string(),
-        complement: z.string(),
+        standart: z.string("Selecione um valor válido"),
+        postalCode: z.string("Preencha o campo corretamente"),
+        country: z.string("Preencha o campo corretamente"),
+        state: z.string("Preencha o campo corretamente"),
+        city: z.string("Preencha o campo corretamente"),
+        neighborhood: z.string("Preencha o campo corretamente"),
+        street: z.string("Preencha o campo corretamente"),
+        number: z.string("Preencha o campo corretamente"),
+        complement: z.nullish(z.string()),
     }
 }
 export type ProjectType = z.infer<typeof schemas.projectSchema>
@@ -42,21 +42,20 @@ export type ProjectDetailType = z.infer<typeof schemas.projectDetailSchema>
 
 
 export const unifiedSchema = z.object({ ...schemas.projectSchema, ...schemas.projectDetailSchema })
+type ProjectAndDetail = z.infer<typeof unifiedSchema>
 
 export default function GridAdicionarProjeto({ users }) {
-    const router = useRouter()
-
-
-
-
-
-
+    const router = useRouter();
 
     const methods = useForm({
-        resolver: zodResolver(unifiedSchema)
-    })
+        resolver: zodResolver(unifiedSchema),
+        defaultValues: {
+            city: "Belo Horizonte",
+            country: "Brasil",
+            state: "Minas Gerais",
+        }
+    });
 
-    ///useState para paginação e função que troca paginaçõ
     const [step, setStep] = useState(0);
 
     const steps = [
@@ -65,73 +64,67 @@ export default function GridAdicionarProjeto({ users }) {
     ];
 
     const nextStep = async (e: any) => {
-        //prevenindo default para não enviar o formulário na primeira etapa
         e.preventDefault();
-        ///acredito que eu tenha que validar aqui.
-        // const zodResponse = safeParse(data, schemas.projectSchema)
         setStep((prev) => prev + 1);
     };
 
     const prevStep = () => {
         setStep((prev) => prev - 1);
-    }
+    };
+
     async function onSubmit(data: any) {
-        ///depois de validado pelo ZOD
-
-
-        const response = await createProjectAction(data)
-
+        const response = await createProjectAction(data);
         if (!response.success) {
-            toast.error(response.message)
+            toast.error(response.message);
         } else {
-            router.push("/arquiteto/projetos")
-
+            toast.success(response.message);
+            router.push(`/arquiteto/projetos/add/hub?projectId=${response.projectId}`);
         }
-
-        ///se Erro logar em toast.
-
-        ///se der certo redirecionar a todos projetos por ora.
     }
+
+    const onError = () => {
+        toast.error("Confira todos os campos.")
+    };
+
 
 
     return (
-        <div className="mt-3 max-w-5/6 mx-auto px-2">
+        <div className="max-w-2xl mx-auto px-4 py-8">
             <Toaster richColors />
             <FormProvider {...methods}>
-                <form onSubmit={methods.handleSubmit(onSubmit)}>
-
-
-                    {/* Step Container */}
+                <form onSubmit={methods.handleSubmit(onSubmit, onError)} className="bg-white rounded-lg shadow-md p-6 space-y-6">
                     <div>
                         {steps[step].component}
-
                     </div>
-                    {step > 0 && (
-                        <button type="button" onClick={prevStep} className="px-4 py-2 bg-gray-300 rounded">
-                            Voltar
-                        </button>
-                    )}
-                    {step < steps.length - 1 ? (
-                        <button type="button" onClick={nextStep} className="px-4 py-2 bg-blue-500 text-white rounded">
-                            Próximo
-                        </button>
-                    ) : (
-                        <button type="submit" className="px-4 py-2 bg-green-500 text-white rounded">
-                            Enviar
-                        </button>
-
-                    )}
+                    <div className="flex flex-col sm:flex-row gap-2 mt-6">
+                        {step > 0 && (
+                            <button
+                                type="button"
+                                onClick={prevStep}
+                                className="w-full sm:w-auto px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition"
+                            >
+                                Voltar
+                            </button>
+                        )}
+                        {step < steps.length - 1 ? (
+                            <button
+                                type="button"
+                                onClick={nextStep}
+                                className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                            >
+                                Próximo
+                            </button>
+                        ) : (
+                            <button
+                                type="submit"
+                                className="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+                            >
+                                Enviar
+                            </button>
+                        )}
+                    </div>
                 </form>
-
-
             </FormProvider>
-
-
-
         </div>
-
-
-    )
-
-
+    );
 }

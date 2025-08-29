@@ -34,7 +34,7 @@ export default function NewPhaseForm({ table, defaultValues, restartForm }) {
         ////se erro, logar erro atraves de erro
         if (response.success) {
             toast.success("Informações cadastradas com sucesso")
-            setTimeout(() => router.refresh(), 2000)
+            router.push(`/arquiteto/projetos/add/hub?projectId=${response.projectId}`);
         } else {
             toast.error(response.message)
         }

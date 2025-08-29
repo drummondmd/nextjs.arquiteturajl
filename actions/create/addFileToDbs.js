@@ -1,9 +1,11 @@
 'use server'
 
+import { success } from "zod";
 import { uploadToCloudinary } from "../../lib/cloudinary/upload";
 import { insertDocumentsInfo } from "../../lib/db/create";
 
-///todo( melhorar validação depois.)
+///todo( melhorar validação depois.), depois mandar os arquivos para a db direto do cliente para economizar espaço do servidor.
+
 ////Adicionar arquivos na cloudnary e posteriormente adicionando a db.
 export async function addFileToCloudnaryeAndDB(prev, formData) {
 
@@ -13,10 +15,9 @@ export async function addFileToCloudnaryeAndDB(prev, formData) {
     const file = inputs.file
 
     ///validação de erros,
-    if (file.size === 0||inputs.projectId === false) {
+    if (file.size === 0 || inputs.projectId === false) {
         return { succes: false, message: "Preencha todos os campos,selecione o projeto e anexe o arquivo" }
     }
-
 
     ////Buffer,tipo,name para db
     const arrayBuffer = await file.arrayBuffer();
@@ -27,8 +28,13 @@ export async function addFileToCloudnaryeAndDB(prev, formData) {
     try {
 
         const response = await uploadToCloudinary(buffer, filename, mimeType)
+        console.log("primeira resposta")
+        console.log(response)
 
         const secondResponse = await insertDocumentsInfo(inputs, response)
+
+        console.log("segunda resposta")
+        console.log(response)
 
         if (!secondResponse) {
             throw new Error()

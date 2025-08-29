@@ -4,6 +4,7 @@ import { useState } from "react";
 import HorizontalTab from "../horizontal-tab";
 import Link from "next/link";
 import StatusBadge from "../gerenciamento/statusBadge";
+import AssingClient from "./assingClient"
 
 export default function ProjetoArqGrid({ projetos }) {
 
@@ -12,6 +13,8 @@ export default function ProjetoArqGrid({ projetos }) {
     const arrayOfTabs = [{ nome: "planejado" }, { nome: "em_andamento" }, { nome: "concluido" }, { nome: "cancelado" }, { nome: "atrasado" }]
 
     const displayTab = projetos.filter((projeto) => projeto.status === display);
+
+
 
 
     return (
@@ -52,10 +55,10 @@ export default function ProjetoArqGrid({ projetos }) {
 
                                             <td>
                                                 {projeto.client && projeto.client.profile.firstName + " " + projeto.client.profile.lastName}
-                                                {!projeto.client && "Cliente não identificado"}
+                                                {!projeto.client && <AssingClient />}
                                             </td>
                                             <td className="text-center">
-                                                <StatusBadge item={projeto} />
+                                                <StatusBadge item={projeto} isDropdown table={"project"} />
 
                                             </td>
                                             <td className="text-center">

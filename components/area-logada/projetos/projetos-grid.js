@@ -45,7 +45,7 @@ export default function ProjetosGrid({ user, projeto, tipo_usuario }) {
       <HorizontalTab display={display} arrayOfTabs={arrayOfTabs} setDisplay={setDisplay} />
 
       <div className="mt-4">
-        {display === "Etapas" && <EtapasProjetoCliente etapas={projeto.designPhases} />}
+        {display === "Etapas" && <EtapasProjetoCliente role={tipo_usuario || "cliente"} etapas={projeto.designPhases} projectId={projeto.id} />}
 
         {display === "Documentos" && <DocumentosGrid arrayOfDocuments={projeto.documents} role={tipo_usuario || "cliente"} />}
         {display === "Pagamentos" && (

@@ -2,7 +2,7 @@ import { formatarDataBR } from "@/lib/utilis/formatDate"
 import { Fragment } from "react"
 import StatusBadge from "../gerenciamento/statusBadge"
 
-export default function EtapasProjetoCliente({ etapas }) {
+export default function EtapasProjetoCliente({ etapas, role, projectId }) {
 
     return (
 
@@ -23,7 +23,9 @@ export default function EtapasProjetoCliente({ etapas }) {
                         <Fragment key={etapa.id || `${etapa.name}-${index}`}>
                             <tr className="text-center">
                                 <td className="fw-medium">{etapa.name}</td>
-                                <td><StatusBadge status={etapa.status} /></td>
+                                <td>
+                                    {role === "arquiteto" ? <StatusBadge item={etapa} isDropdown table="projectPhase" /> : <StatusBadge status={etapa.status} />}
+                                </td>
                                 <td>{formatarDataBR(etapa.startDate) || "-"}</td>
                                 <td>{formatarDataBR(etapa.expectedEndDate) || "-"}</td>
                             </tr>

@@ -20,7 +20,7 @@ import { redirect } from "next/navigation";
  */
 
 
-export default async function createUserAction(userType, currentState, formData) {
+export default async function createUserAction(userType: string, currentState, formData: any): Promise<{ success: boolean; payload?: Object; message?: string; }> {
 
     const today = new Date()
     const tempPassword = generateRandomPassword()
@@ -29,7 +29,7 @@ export default async function createUserAction(userType, currentState, formData)
     let isAdminCreate = false
 
     //se user criado pelo admin, fazer senha aleatória.
-    if (userType === "admin") {
+    if (userType === "arquiteto") {
         inputs.password = tempPassword
         isAdminCreate = true
     }
@@ -82,7 +82,8 @@ export default async function createUserAction(userType, currentState, formData)
         ageGroup: null,
         stylePreference: null,
         referralSource: null,
-        privateNotes: null
+        privateNotes: null,
+        userId:null
     }
 
     const userToken = {
@@ -92,7 +93,8 @@ export default async function createUserAction(userType, currentState, formData)
         tokenType: 'email_confirmation',
         token: token,
         tokenExpiry: null,
-        createdAt: today
+        createdAt: today,
+        userId:null
     }
 
 
@@ -130,7 +132,7 @@ export default async function createUserAction(userType, currentState, formData)
 
 
     ///nodemailer
-    const html = htmlNewUser(isAdminCreate, inputs.firstName, inputs.lastName, tempPassword, token,inputs.email)
+    const html = htmlNewUser(isAdminCreate, inputs.firstName, inputs.lastName, tempPassword, token, inputs.email)
     sendEmail(inputs.email, "Cadastro de Usuário", html, "Usuário cadastrado com sucesso.")
 
 
