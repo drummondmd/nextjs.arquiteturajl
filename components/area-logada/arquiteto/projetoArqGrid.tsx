@@ -53,9 +53,9 @@ export default function ProjetoArqGrid({ projetos }) {
                                         <tr key={projeto.id}>
                                             <td>{projeto.title}</td>
 
-                                            <td>
+                                            <td className="text-center">
                                                 {projeto.client && projeto.client.profile.firstName + " " + projeto.client.profile.lastName}
-                                                {!projeto.client && <AssingClient />}
+                                                {!projeto.client && <AssingClient projectId={projeto.id} />}
                                             </td>
                                             <td className="text-center">
                                                 <StatusBadge item={projeto} isDropdown table={"project"} />

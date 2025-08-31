@@ -24,19 +24,28 @@ export default async function createProjectAction(data: ProjectAndDetailSchema):
         return { success: false, message: "Erro na validação de dados" }
     }
 
-    ///anexar imagem no cloudnary
-    const file = data.coverUrl;
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    const mimeType = file.type;
-    const filename = file.name;
+    ///anexar imagem no cloudnary se imagem a ser anexada.
+    let secure_url: string = null
+    if (data.coverUrl) {
+        const file = data.coverUrl;
+        const arrayBuffer = await file.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+        const mimeType = file.type;
+        const filename = file.name;
 
-    const cloudResponse = await uploadToCloudinary(buffer, filename, mimeType)
-    const { secure_url } = cloudResponse;
+        const cloudResponse = await uploadToCloudinary(buffer, filename, mimeType);
+
+        secure_url = cloudResponse.secure_url
+
+    }
+
 
     ///ajustar dados.
     ///trocando file do cliente para url do cloundnary
-    let projectData: ProjectType = {
+
+    type AdjustProjectType = Omit<ProjectType, "coverUrl"> & { coverUrl: string }
+
+    let projectData: AdjustProjectType = {
         title: zodResponse.data.title,
         projectType: zodResponse.data.projectType,
         investmentExpectation: zodResponse.data.investmentExpectation,
