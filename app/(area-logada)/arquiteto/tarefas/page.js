@@ -5,7 +5,7 @@ import splitArrayByStatus from "@/lib/utilis/splitArrayByStatus";
 import StatusBadge from "@/components/area-logada/gerenciamento/statusBadge";
 import CardTarefas from "@/components/area-logada/tarefas/card";
 import normalizePrismaData from "@/lib/utilis/normalize-prisma";
-import CardContainer from "@/components/area-logada/tarefas/cardContainer";
+import CardContainerGrid from "../../../../components/area-logada/tarefas/cardContainer-grid"
 
 
 export default async function TasksPage() {
@@ -41,27 +41,7 @@ export default async function TasksPage() {
 
 
 
-    //
+    ///ignorando projectPhaseTeste pq não to vendo necessidade no momento.
 
-
-
-    return (
-        <>
-            <div>Fazer filtro depois</div>
-
-            <CardContainer title={"Etapas de Projeto"} objectOfArray={splitedProjectPhase} />
-            <div className="py-6"><hr className="border-gray-200" /></div>
-
-
-            <CardContainer title={"Tarefas de Projeto"} objectOfArray={splitedProjectPhaseTask} />
-            <div className="py-6"><hr className="border-gray-200" /></div>
-
-            <CardContainer title={"Etapas de Construção"} objectOfArray={splitedConstructionPhase} />
-            <div className="py-6"><hr className="border-gray-200" /></div>
-
-            <CardContainer title={"Tarefas de Construção"} objectOfArray={splitedConstructionTask} />
-
-        </>
-
-    )
+    return <CardContainerGrid splitedConstructionPhase={splitedConstructionPhase} splitedConstructionTask={splitedConstructionTask} splitedProjectPhase={splitedProjectPhase} />
 }

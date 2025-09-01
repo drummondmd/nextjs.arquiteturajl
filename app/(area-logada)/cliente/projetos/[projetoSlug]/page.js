@@ -1,5 +1,8 @@
+//versão cliente
+
 import ProjetosGrid from "@/components/area-logada/projetos/projetos-grid"
 import getProjeto from "@/lib/db/select";
+
 
 export default async function ProjetoSlugPage({ params }) {
     const { projetoSlug } = await params;
@@ -9,12 +12,11 @@ export default async function ProjetoSlugPage({ params }) {
 
     ///fazer checagem se usuario logado pode ver dados do projeto, depois
 
-    return (
-        <>
-            <ProjetosGrid tipo_usuario={"cliente"} user={null} projeto={projeto} />
+
+    ///se não tiver etapa.
+
+    return <ProjetosGrid tipo_usuario={"cliente"} user={null} projeto={projeto} />
 
 
-        </>
 
-    )
 }

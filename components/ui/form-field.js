@@ -9,7 +9,7 @@ export function FormField({
     type = 'text',
     placeholder = '',
     value = undefined, // <-- Garante que nunca será undefined
-    onChange = null,
+    onChange = staticForm ? undefined : onChange,
     required = false,
     disabled = false,
     error = '',

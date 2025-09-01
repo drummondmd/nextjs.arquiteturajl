@@ -79,3 +79,33 @@ export const projectAndDetailSchema = z.object({
     number: z.string(),
     complement: z.nullish(z.string()),
 })
+
+export const constructionTask = z.object({
+    name: z.string().min(5, "Minimo de 5 caracteres"),
+    phaseId: z.uuid(),
+    status: z.enum(["planejado", "em_andamento", "concluido", "cancelado", "atrasado"]),
+    budget: z.nullish(z.coerce.number()),
+    actualCost: z.nullish(z.coerce.number()),
+    startDate: z.date(),
+    expectedEndDate: z.date(),
+    endDate: z.nullish(z.date()),
+    notes: z.nullish(z.string()),
+    responsible: z.nullish(z.string()),
+    priority: z.nullish(z.coerce.number()),
+    fornecedor: z.nullish(z.string()),
+    link: z.nullish(z.url())
+})
+
+export const constructionTaskUI = z.object({
+    name: z.string().min(5, "Minimo de 5 caracteres"),
+    phaseId: z.uuid(),
+    status: z.enum(["planejado", "em_andamento", "concluido", "cancelado", "atrasado"]),
+    budget: z.nullish(z.coerce.number()),
+    actualCost: z.nullish(z.coerce.number()),
+    startDate: z.iso.date(),
+    expectedEndDate: z.iso.date(),
+    notes: z.nullish(z.string()),
+    priority: z.coerce.number(),
+    fornecedor: z.nullish(z.string()),
+    link: z.nullish(z.url())
+})

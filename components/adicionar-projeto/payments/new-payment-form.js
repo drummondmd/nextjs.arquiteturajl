@@ -14,6 +14,7 @@ import createPaymentAction from "../../../actions/create/createPaymentAction"
 //validação de erros do array depois.
 
 export default function NewPaymentForm({ project, projects, onSubmitParent, defaultValues }) {
+    console.log(project, projects, onSubmitParent, defaultValues)
 
     ////2 formas de funcionar, diretamente com o projeto ou geral com possibiliade de selecionar projeto
     ///se definir o projeto não preciso avaliar todos projetos.
@@ -32,9 +33,11 @@ export default function NewPaymentForm({ project, projects, onSubmitParent, defa
 
     }
 
+    let optionsProject;
+
 
     if (!project) {
-        const optionsProject = projects.map((elem) => {
+         optionsProject = projects.map((elem) => {
             return { label: elem.title, value: elem.id }
         })
 
@@ -71,7 +74,7 @@ export default function NewPaymentForm({ project, projects, onSubmitParent, defa
                 <Controller control={control} name="description" render={({ field }) => <FormField error={errors.description?.message} {...field} label={"Descrição"} className="mb-2" />} />
                 <Controller control={control} name="amount" render={({ field }) =>
                     <FormField {...field}
-                        value={field.value ? field.value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) : ""}
+                        value={field.value ? field.value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) : " "}
                         onChange={(e) => {
                             const raw = e.target.value.replace(/\D/g, "");
                             const numeric = Number(raw) / 100;
@@ -88,7 +91,6 @@ export default function NewPaymentForm({ project, projects, onSubmitParent, defa
                         {Object.values(errors).map((err, idx) => <div key={idx}>{err.message}</div>)}
                     </div>
                 )}
-                <SubmitButton loading={isSubmitting} className="w-full mt-4" />
 
             </form>
         )

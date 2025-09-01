@@ -3,27 +3,49 @@
 import { useState } from "react"
 import TabelaGerenciamento from "./tabela-gerenciamento"
 import StatusGerenciamento from "./status"
-import CalendarioGerenciamento from "./calendario"
 import HorizontalTab from "../horizontal-tab"
 import DetalhadoGerenciamento from "./detalhado"
 import { Toaster } from "@/components/ui/sonner"
+import { Button } from "../../ui/button"
+import Link from "next/link"
 
 export default function GerenciamentoGrid({ user, projeto }) {
 
   ////se nenhuma fase registrada, mostrar aviso
-  if(projeto.constructionPhases.length == 0){
-    return <p>Nenhuma obra ainda registrada, contacte arquiteto</p>
+  if (projeto.constructionPhases.length == 0) {
+    return <>
+      <div className="px-2 py-4">
+        <header className="mb-4 border-bottom pb-3">
+          <h1 className="display-4">{projeto.title}</h1>
+          <h2 className="mt-4 fw-semibold text-muted">Página de gerenciamento de Obra</h2>
+        </header>
+        <p>Nenhuma obra ainda registrada</p>
+        <AddGerenciamento />
+      </div>
+
+
+    </>
   }
 
 
 
   const [display, setDisplay] = useState("Resumo")
-  const arrayOfTabs = [{ nome: "Resumo" }, { nome: "Detalhado" }, { nome: "Status" }, { nome: "Calendário" }, { nome: "Orçamento" }]
+  const arrayOfTabs = [{ nome: "Resumo" }, { nome: "Detalhado" }, { nome: "Status" }, { nome: "Orçamento" }]
 
+  function AddGerenciamento() {
+    return (<div>
+      <Button asChild variant={"link"}>
+        <Link href={`/arquiteto/projetos/add/constructionPhase?projectId=${projeto.id}`}>        Adicionar etapas
+
+        </Link>
+      </Button>
+
+    </div>)
+  }
 
   return (
     <>
-    <Toaster richColors />
+      <Toaster richColors />
       <div className="px-2 py-4">
         <header className="mb-4 border-bottom pb-3">
           <h1 className="display-4">{projeto.title}</h1>
@@ -54,13 +76,6 @@ export default function GerenciamentoGrid({ user, projeto }) {
             <StatusGerenciamento
               user={user}
               projeto={projeto}
-            />
-          )}
-          {display === "Calendário" && (
-            <CalendarioGerenciamento
-              user={user}
-              projeto={projeto}
-              etapas={projeto.constructionPhases}
             />
           )}
           {display === "Detalhado" && <DetalhadoGerenciamento user={user} projeto={projeto} />}

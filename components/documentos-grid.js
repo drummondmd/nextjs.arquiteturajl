@@ -4,8 +4,24 @@ import { Fragment } from "react";
 
 export default function DocumentosGrid({ arrayOfDocuments, role }) {
 
+    console.log(role === "arquiteto")
+
+
     if (arrayOfDocuments.length === 0) {
-        return <p>Nenhum documento anexado.</p>
+        return (
+            <div>
+                {role === "arquiteto" && (
+                    <Link href={"/arquiteto/documentos/add"}>
+                        <button className="btn btn-secondary p-2 mb-2">Adionar novo documento
+                        </button>
+                    </Link>
+
+                )}
+                <p>Nenhum documento anexado.</p>
+
+            </div>
+
+        )
     }
 
     function Cliente({ arrayOfDocuments }) {

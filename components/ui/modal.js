@@ -23,7 +23,7 @@ export default function Modal({ isOpen, onClose, title, children }) {
       />
 
       {/* Conteúdo do modal */}
-      <div className="relative bg-white rounded-lg shadow-lg max-w-lg w-full p-6 z-10 animate-fadeIn">
+      <div className="relative bg-white rounded-lg shadow-lg max-w-[80vw] w-full p-6 z-10 animate-fadeIn">
         {/* Título e botão fechar */}
         <div className="flex justify-between items-center mb-4">
           {title && <h2 className="text-xl font-semibold">{title}</h2>}

@@ -7,8 +7,10 @@ import { useRouter } from "next/navigation";
 import EtapasProjetoCliente from "./etapas";
 import DocumentosGrid from "@/components/documentos-grid";
 import { formatarDataBR } from "@/lib/utilis/formatDate";
+import PagamentosEmProjeto from "./pagamentos"
 
 export default function ProjetosGrid({ user, projeto, tipo_usuario }) {
+  console.log(tipo_usuario)
   const router = useRouter()
 
   const [display, setDisplay] = useState("Etapas");
@@ -48,30 +50,7 @@ export default function ProjetosGrid({ user, projeto, tipo_usuario }) {
         {display === "Etapas" && <EtapasProjetoCliente role={tipo_usuario || "cliente"} etapas={projeto.designPhases} projectId={projeto.id} />}
 
         {display === "Documentos" && <DocumentosGrid arrayOfDocuments={projeto.documents} role={tipo_usuario || "cliente"} />}
-        {display === "Pagamentos" && (
-          <div>
-            <table className="table table-striped">
-              <thead>
-                <tr>
-                  <th>Descrição</th>
-                  <th>Status</th>
-                  <th>Vencimento</th>
-                  <th>Valor</th>
-                </tr>
-              </thead>
-              <tbody>
-                {projeto.payments.map((payment) => (
-                  <tr key={payment.id}>
-                    <td>{payment.description}</td>
-                    <td>{payment.status}</td>
-                    <td>{formatarDataBR(payment.dueDate)}</td>
-                    <td>R$ {payment.amount.toLocaleString('pt-BR')}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        {display === "Pagamentos" && <PagamentosEmProjeto payments={projeto.payments} role={tipo_usuario} projectId={projeto.id} />}
       </div>
     </div>
   );

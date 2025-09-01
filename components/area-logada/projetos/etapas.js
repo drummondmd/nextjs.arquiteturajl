@@ -1,6 +1,8 @@
 import { formatarDataBR } from "@/lib/utilis/formatDate"
 import { Fragment } from "react"
 import StatusBadge from "../gerenciamento/statusBadge"
+import Link from "next/link"
+import { Button } from "../../ui/button"
 
 export default function EtapasProjetoCliente({ etapas, role, projectId }) {
 
@@ -18,7 +20,7 @@ export default function EtapasProjetoCliente({ etapas, role, projectId }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {etapas.length === 0 && <tr><td colSpan={"4"}>Nenhuma etapa registrada</td></tr>}
+                    {etapas.length === 0 && <tr><td colSpan={"4"}>Nenhuma etapa registrada. {role === "arquiteto" && <Button className={"ml-3"} variant="link" asChild><Link href={"/arquiteto/projetos/add/projectPhase?projectId="+projectId}>Adicionar Etapas</Link></Button>}</td></tr>}
                     {etapas.map((etapa, index) => (
                         <Fragment key={etapa.id || `${etapa.name}-${index}`}>
                             <tr className="text-center">

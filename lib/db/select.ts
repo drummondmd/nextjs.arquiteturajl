@@ -2,7 +2,8 @@ import { raw } from "@prisma/client/runtime/library";
 import { pool } from "./db-config";
 import { prisma } from "./prisma";
 import normalizePrismaData from "../utilis/normalize-prisma";
-import { paymentType } from "@prisma/client";
+import { paymentType, Project, ProjectPhase } from "@prisma/client";
+import { convertIsoDatesInArrayObjects } from "../utilis/normalizeDateInArrayOrObject";
 
 ///USUARIOS
 
@@ -45,7 +46,12 @@ export async function getUserCompleto(userEmail) {
 
 ////PROJETOS
 
+
 export default async function getProjeto(slug) {
+
+
+
+
     try {
         const rawResult = await prisma.project.findUnique({
             where: { slug: slug },
@@ -53,8 +59,8 @@ export default async function getProjeto(slug) {
                 details: true, designPhases: { orderBy: { order: "asc" } }, constructionPhases: { include: { tasks: true }, orderBy: { order: "asc" } }, documents: true, payments: { where: { paymentType: "entrada" } }
             }
         })
-        const result = normalizePrismaData(rawResult)
-        return result
+        const normalizedResult = normalizePrismaData(rawResult)
+        return normalizedResult
 
     } catch (error) {
         console.error("Erro ao obter dados", error)
