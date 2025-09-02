@@ -80,14 +80,14 @@ export const projectAndDetailSchema = z.object({
     complement: z.nullish(z.string()),
 })
 
-export const constructionTask = z.object({
+export const constructionTaskSchema = z.object({
     name: z.string().min(5, "Minimo de 5 caracteres"),
     phaseId: z.uuid(),
     status: z.enum(["planejado", "em_andamento", "concluido", "cancelado", "atrasado"]),
     budget: z.nullish(z.coerce.number()),
     actualCost: z.nullish(z.coerce.number()),
-    startDate: z.date(),
-    expectedEndDate: z.date(),
+    startDate: z.iso.date(),
+    expectedEndDate: z.iso.date(),
     endDate: z.nullish(z.date()),
     notes: z.nullish(z.string()),
     responsible: z.nullish(z.string()),

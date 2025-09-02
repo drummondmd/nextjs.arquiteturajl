@@ -40,5 +40,5 @@ export default async function AddTasksFromConstructionPage({ params, searchParam
     ///buscar projeto
 
 
-    return <FormContainerForTasks projectSlug={projeto.slug} phaseId={constructionPhaseId} prevTasks={constructionPhase.tasks} />
+    return <FormContainerForTasks phaseName={constructionPhase.name} projectSlug={projeto.slug} phaseId={constructionPhaseId} prevTasks={constructionPhase.tasks} />
 }

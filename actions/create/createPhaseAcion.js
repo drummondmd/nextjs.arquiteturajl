@@ -1,18 +1,27 @@
 'use server'
 
-import z from "zod"
-import { constructionPhaseSchema, projectPhaseSchema } from "../../lib/validationSchemas/schemas"
+import z, { success } from "zod"
+import { constructionPhaseSchema, constructionTask, constructionTaskSchema, projectPhaseSchema } from "../../lib/validationSchemas/schemas"
 import { convertIsoDatesInArrayObjects } from "../../lib/utilis/normalizeDateInArrayOrObject"
 import { createManyFunction } from "../../lib/db/create"
 
 export default async function createPhaseAction(table, data) {
+    console.log(table)
 
-    const projectId = data[table][0].projectId
+
+    let projectId;
+    if (table != "construcionTask") {
+        projectId = data[table][0].projectId
+    }
+    // if (table != "construcionTask") {
+    //     projectId = data[table][0].projectId
+    // }
 
     ///tentar fazer para varias tabelas
     const SchemaReference = {
         projectPhase: projectPhaseSchema,
-        constructionPhase: constructionPhaseSchema
+        constructionPhase: constructionPhaseSchema,
+        ConstructionTask: constructionTaskSchema
     }
 
     ////validar erros com zod no servidor
@@ -25,6 +34,7 @@ export default async function createPhaseAction(table, data) {
     const zodResponse = zodArraySchema.safeParse(data)
     if (!zodResponse.success) {
         ///deu erro na validação
+        console.error(zodResponse.error)
         return { success: false, message: "Erro na validação de dados do servidor." }
     }
 
