@@ -9,7 +9,6 @@ export function FormField({
     type = 'text',
     placeholder = '',
     value = undefined, // <-- Garante que nunca será undefined
-    onChange = staticForm ? undefined : onChange,
     required = false,
     disabled = false,
     error = '',
@@ -21,7 +20,9 @@ export function FormField({
     defaultValue = null,
     // defaultValue = state?.payload ? state.payload.get(name) : "",
     register = undefined,
-    staticForm = false /// prop para determinar se formulario é estatico, não tem mudança de estado.
+    staticForm = false, /// prop para determinar se formulario é estatico, não tem mudança de estado.
+    onChange = staticForm ? undefined : onChange,
+
 
 }) {
     const [showPassword, setShowPassword] = useState(false);

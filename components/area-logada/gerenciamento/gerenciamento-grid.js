@@ -8,8 +8,9 @@ import DetalhadoGerenciamento from "./detalhado"
 import { Toaster } from "@/components/ui/sonner"
 import { Button } from "../../ui/button"
 import Link from "next/link"
+import OrcamentoGerenciamento from "./orcamento-gerenciamento"
 
-export default function GerenciamentoGrid({ user, projeto }) {
+export default function GerenciamentoGrid({ user, projeto,tipo_usuario }) {
 
   ////se nenhuma fase registrada, mostrar aviso
   if (projeto.constructionPhases.length == 0) {
@@ -69,16 +70,14 @@ export default function GerenciamentoGrid({ user, projeto }) {
               />
             </div>
           )}
-          {display === "Orçamento" && (
-            <p className="fs-5 text-secondary">Orçamento</p>
-          )}
+          {display === "Orçamento" && <OrcamentoGerenciamento projeto={projeto} />}
           {display === "Status" && (
             <StatusGerenciamento
               user={user}
               projeto={projeto}
             />
           )}
-          {display === "Detalhado" && <DetalhadoGerenciamento user={user} projeto={projeto} />}
+          {display === "Detalhado" && <DetalhadoGerenciamento tipo_usuario={tipo_usuario} user={user} projeto={projeto} />}
         </main>
       </div>
 

@@ -17,9 +17,9 @@ export function EditFormGeneric({ data, table }) {
 
     const iasdasd = ["name", "budget", "actualCost", "notes", "order"]
 
-    const hiddenInputs = ["id", "projectId"];
+    const hiddenInputs = ["id", "projectId","phaseId"];
     const datas = ["dueDate", "startDate", "expectedEndDate"];
-    const excludedeInputs = ["createdAt", "project", "notificationSent", "status", "paymentType", "endDate", "responsible", "tasks"];
+    const excludedeInputs = ["createdAt", "project", "notificationSent", "status", "paymentType", "endDate", "responsible", "tasks","actualCost"];
 
     /*buscar outros elementos que não podem ser atualizados dessa forma
     entradas.forEach((entrada, idx) => {
@@ -41,10 +41,10 @@ export function EditFormGeneric({ data, table }) {
                     if (hiddenInputs.find((elem) => elem === entrada)) {
                         return <input name={entrada} key={entrada} value={defaultValues[idx]} readOnly hidden></input>
                     } else if (datas.find((elem) => elem === entrada)) {
-                        return <FormField staticForm type="date" key={entrada} name={entrada} label={entrada} defaultValue={lightFormat(defaultValues[idx], 'yyyy-MM-dd')} />
+                        return <FormField staticForm={true} type="date" key={entrada} name={entrada} label={entrada} defaultValue={lightFormat(defaultValues[idx], 'yyyy-MM-dd')} />
                     } else if (excludedeInputs.find((elem) => elem === entrada)) { return null }
                     else {
-                        return <FormField staticForm key={entrada} name={entrada} label={entrada} defaultValue={defaultValues[idx]} />
+                        return <FormField staticForm={true} key={entrada} name={entrada} label={entrada} defaultValue={defaultValues[idx]} />
                     }
 
 

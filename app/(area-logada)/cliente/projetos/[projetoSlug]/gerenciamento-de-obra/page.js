@@ -34,7 +34,7 @@ export default async function GerenciamentoObraPage({ params }) {
         </div>
         )
     } else {
-        return <GerenciamentoGrid user={null} projeto={projeto} />
+        return <GerenciamentoGrid tipo_usuario={"cliente"} user={null} projeto={projeto} />
     }
 
 }

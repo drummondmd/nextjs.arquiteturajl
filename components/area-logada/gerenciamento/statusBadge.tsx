@@ -4,6 +4,7 @@ import { statusPhase } from "@prisma/client";
 
 
 export default function StatusBadge({ status, isDropdown, item, table }: { status?: string, isDropdown: boolean, item: any, table: string }) {
+
     if (!status) {
         status = item.status
     }
@@ -34,11 +35,13 @@ export default function StatusBadge({ status, isDropdown, item, table }: { statu
         { table: "budget", enum: ["enviado", "aceito", "rejeitado", "cancelado"] },
         { table: "payment", enum: ["pendente", "pago", "atrasado", "cancelado"] },
         { table: "projectPhase", enum: ["planejado", "em_andamento", "concluido", "cancelado", "atrasado"] },
-        { table: "project", enum: enumBase }
+        { table: "project", enum: enumBase },
+        { table: "constructionTask", enum: enumBase }
     ]
     const itensOfDd = tableCheatSheet.find((elem) => elem.table === table)?.enum || [];
 
-    function handleChangeStatus(elem, item, table) {
+    function handleChangeStatus(elem:any, item:any, table:string) {
+        console.log(elem,item,table)
         updateStatusByBadge(elem, table, item.id)
     }
 

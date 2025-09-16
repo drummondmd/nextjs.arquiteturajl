@@ -26,7 +26,7 @@ export default function FormForTasks({ phaseId, projectSlug, table }: { phaseId:
         expectedEndDate: lightFormat(new Date(), "yyyy-MM-dd"),
         priority: "1",
         actualCost: " ",
-        budget: "",
+        budget: " ",
         fornecedor: undefined,
         link: undefined,
         notes: undefined

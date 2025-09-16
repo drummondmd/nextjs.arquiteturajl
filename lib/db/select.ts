@@ -2,7 +2,7 @@ import { raw } from "@prisma/client/runtime/library";
 import { pool } from "./db-config";
 import { prisma } from "./prisma";
 import normalizePrismaData from "../utilis/normalize-prisma";
-import { paymentType, Project, ProjectPhase } from "@prisma/client";
+import { ConstructionPhase, ConstructionTask, paymentType, Project, ProjectDetail, ProjectPhase } from "@prisma/client";
 import { convertIsoDatesInArrayObjects } from "../utilis/normalizeDateInArrayOrObject";
 
 ///USUARIOS
@@ -46,11 +46,11 @@ export async function getUserCompleto(userEmail) {
 
 ////PROJETOS
 
+//payment e documentos como any por que não achei
+export type ProjetoCompleto = Project & {details:ProjectDetail,designPhases:Array<ProjectPhase>,constructionPhases:Array<ConstructionPhase & {tasks:Array<ConstructionTask>}>,documents:any,payments:any}
 
-export default async function getProjeto(slug) {
 
-
-
+export default async function getProjeto(slug:string):Promise<ProjetoCompleto|null> {
 
     try {
         const rawResult = await prisma.project.findUnique({
@@ -64,6 +64,7 @@ export default async function getProjeto(slug) {
 
     } catch (error) {
         console.error("Erro ao obter dados", error)
+        return null
 
     }
 }
