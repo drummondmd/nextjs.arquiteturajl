@@ -1,4 +1,5 @@
 import { ChartBarDefault, ChartComponent } from "@/components/area-logada/arquiteto/home/chart"
+import ClientForHome from "./clientComponent"
 
 export default async function ArquitetoHome() {
 
@@ -27,6 +28,7 @@ export default async function ArquitetoHome() {
     return (
         <div className="container">
             <p className="display-1">Homepage do Arquiteto</p>
+            <ClientForHome />
             <div className="grid grid-cols-3">
                 {chartsData.map((dado)=>{
                     return(

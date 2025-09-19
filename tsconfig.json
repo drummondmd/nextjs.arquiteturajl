@@ -32,7 +32,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "components/adicionar-projeto/projectPhase/grid.js"  ],
+, "components/adicionar-projeto/projectPhase/grid.js", "app/api/auth/[...nextauth]/route.js"  ],
   "exclude": [
     "node_modules"
   ]

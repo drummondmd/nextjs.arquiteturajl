@@ -1,11 +1,6 @@
-
-import Link from "next/link";
+import HomePage from "./../components/home-page/homePage"
 
 export default async function Home() {
 
-    // const projetos = await getProjetos()
-    return <>
-        <h1>Home Page</h1>
-        <Link href={"/login"}>Login</Link>
-    </>
+    return <HomePage />
 }

@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack ",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:legacy-css": "postcss styles/legacy.css -o styles/legacy.scoped.css --config ./postcss.legacy.config.cjs",
+    "dev:legacy-css": "postcss styles/legacy.css -o styles/legacy.scoped.css --config ./postcss.legacy.config.cjs -w"
   },
   "prisma": {
     "seed": "node --compiler-options {\"module\"} prisma/seed.js"
@@ -36,7 +38,6 @@
     "next-themes": "^0.4.6",
     "nodemailer": "^6.10.1",
     "pg": "^8.16.3",
-    "postcss": "^8.5.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.62.0",
@@ -50,8 +51,13 @@
     "@tailwindcss/postcss": "^4.1.11",
     "@types/node": "24.1.0",
     "@types/react": "19.1.8",
+    "autoprefixer": "^10.4.21",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
+    "postcss-prefix-selector": "^2.1.1",
+    "postcss-prefixwrap": "^1.57.0",
     "prisma": "^6.11.1",
     "tailwindcss": "^4.1.11",
     "tw-animate-css": "^1.3.5"
