@@ -1,12 +1,14 @@
 'use client'
 
+import { UserCompleto } from "@/lib/db/select";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function HubGridProjetos({ userData, role }) {
+export default function HubGridProjetos({ user} :{user:UserCompleto}) {
+  const role = user?.userType
 
-  const itens = userData.projects;
+  const itens = user?.projects
 
   const router = useRouter()
 

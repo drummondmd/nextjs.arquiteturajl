@@ -45,7 +45,7 @@ export default function MainSideBar({ user, role, links }) {
                 </button>
 
 
-                <button onClick={logout} className="btn btn-outline-danger btn-sm w-100">
+                <button onClick={()=>router.push("/api/auth/signout")} className="btn btn-outline-danger btn-sm w-100">
                     Sair
                 </button>
 

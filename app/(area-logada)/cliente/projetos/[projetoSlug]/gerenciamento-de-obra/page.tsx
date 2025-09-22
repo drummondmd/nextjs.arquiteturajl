@@ -1,15 +1,30 @@
 ////versão cliente
 
+import { ServerSession } from "@/app/redirect/page"
 import GerenciamentoGrid from "@/components/area-logada/gerenciamento/gerenciamento-grid"
+import { auth } from "@/lib/auth/auth"
 import getProjeto from "@/lib/db/select"
+import { notFound, redirect } from "next/navigation"
 
-export default async function GerenciamentoObraPage({ params }) {
+export default async function GerenciamentoObraPage({ params }: { params: any }) {
 
-    const { projetoSlug } = await params
-    ///buscar user pelo login e verificar se ele pode acessar tal projeto
+    const session = await auth() as ServerSession
 
-    ///buscar projeto
-    const projeto = await getProjeto(projetoSlug)
+    if (!session) {
+        redirect("/login")
+    }
+
+    const { projetoSlug } = await params;
+
+    ///buscar projeto por slug
+    const projeto = await getProjeto(projetoSlug);
+
+    ///página de erro se cliente não for o do projeto.
+    if (!projeto || session.user.userId != projeto.clientId) {
+        console.log("cliente não autorizado");
+        notFound()
+
+    }
 
     ///se não tiver etapa.
     if (projeto.constructionPhases.length === 0) {
