@@ -1,3 +1,4 @@
+import { UserProfile } from "@prisma/client"
 import { title } from "process"
 import z from "zod"
 
@@ -109,3 +110,24 @@ export const constructionTaskUI = z.object({
     fornecedor: z.nullish(z.string()),
     link: z.nullish(z.url())
 })
+
+export const userProfileSchema = z.object({
+    id: z.uuid(),
+    firstName: z.string("Preencha um nome válido").min(2, "Preencha um nome válido"),
+    userId: z.string("Preencha um ID de usuário válido").uuid(),
+    lastName: z.nullish(z.string("Preencha um sobrenome válido").min(2, "Preencha um sobrenome válido")),
+    phone: z.nullish(z.string("Preencha um telefone válido").min(10, "Preencha um telefone válido")),
+    avatarUrl: z.nullish(z.file()),
+    birthDate: z.nullish(z.iso.date("Preencha uma data de nascimento válida")),
+    gender: z.nullish(z.enum(["masculino", "feminino", "outro"], "Selecione um gênero válido")),
+    identityDoc: z.nullish(z.string("Preencha um documento de identidade válido").min(5, "Preencha um documento de identidade válido")),
+    cpf: z.nullish(z.string("Preencha um CPF válido").min(11, "Preencha um CPF válido")),
+    occupation: z.nullish(z.string("Preencha uma ocupação válida").min(2, "Preencha uma ocupação válida")),
+    maritalStatus: z.nullish(z.string("Preencha um estado civil válido")),
+    hasChildren: z.nullish(z.coerce.boolean()),
+    stylePreference: z.nullish(z.string("Preencha uma preferência de estilo válida")),
+    referralSource: z.nullish(z.string("Preencha uma fonte de referência válida")),
+}
+)
+
+export type UserProfileType = z.infer<typeof userProfileSchema>

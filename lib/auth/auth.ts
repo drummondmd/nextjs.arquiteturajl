@@ -30,7 +30,7 @@ export const authOptions = {
                 if (!user || !isPasswordMatched) {
                     return null
                 } else {
-                    return { userId:user.id, userType: user.userType, email: user.email, firstName: user.profile?.firstName, lastName: user.profile?.lastName }
+                    return { image:user.profile?.avatarUrl, userId:user.id, userType: user.userType, email: user.email, firstName: user.profile?.firstName, lastName: user.profile?.lastName }
                 }
 
             } catch (error) {

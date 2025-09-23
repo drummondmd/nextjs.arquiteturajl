@@ -47,11 +47,16 @@ model UserProfile {
 model UserToken {
   id          String    @id @default(uuid())
   userId      String
-  tokenType   String?
+  tokenType   tokenType
   token       String
   tokenExpiry DateTime?
   createdAt   DateTime? @default(now())
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum tokenType {
+  reset_password
+  email_confirmation
 }
 
 enum statusPhase {

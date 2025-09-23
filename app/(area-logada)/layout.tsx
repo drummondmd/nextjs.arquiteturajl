@@ -6,7 +6,7 @@ import { auth } from "@/lib/auth/auth";
 import { notFound, redirect } from "next/navigation";
 import { ReactElement } from "react";
 
-export default async function LayoutAreaLogada({ children }:{children:ReactElement}) {
+export default async function LayoutAreaLogada({ children }: { children: ReactElement }) {
 
     const session = await auth() as ServerSession
 
@@ -26,7 +26,7 @@ export default async function LayoutAreaLogada({ children }:{children:ReactEleme
 
     return (
         <div className="row">
-            <MainSideBar links={links} role={userType} user={user} />
+            <MainSideBar links={links} role={userType} user={user} image={session.user.image} />
 
             <div className="col-lg-10">
                 {children}

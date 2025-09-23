@@ -1,11 +1,9 @@
-import { linksForSideBar } from "@/lib/recursos/links";
-import MainSideBar from "@/components/area-logada/main-sidebar";
+
 import { getUser } from "@/lib/db/select";
-import { ServerSession } from "../redirect/page";
 import { auth } from "@/lib/auth/auth";
 import { notFound, redirect } from "next/navigation";
-import { ReactElement } from "react";
 import InfoComponent from "@/components/info/infoComponent";
+import { ServerSession } from "@/app/redirect/page";
 
 export default async function InfoArquiteto() {
 
