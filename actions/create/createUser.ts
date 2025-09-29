@@ -14,13 +14,13 @@ import { redirect } from "next/navigation";
 /**
  *
  * @param {string} userType - admin ou cliente ( muda a rota de cadastro), fazer bind na chamada.
- * @param {*} currentState  -padrão
+ * @param {*} _currentState  -padrão
  * @param {*} formData - padrão
  * @returns {Object} - success(boolean), message, payload se erro.
  */
 
 
-export default async function createUserAction(userType: string, currentState, formData: any): Promise<{ success: boolean; payload?: Object; message?: string; }> {
+export default async function createUserAction(userType: string, _currentState: any, formData: any): Promise<{ success: boolean; payload?: Object; message?: string; }> {
 
     const today = new Date()
     const tempPassword = generateRandomPassword()
@@ -83,7 +83,7 @@ export default async function createUserAction(userType: string, currentState, f
         stylePreference: null,
         referralSource: null,
         privateNotes: null,
-        userId:null
+        userId: null
     }
 
     const userToken = {
@@ -94,7 +94,7 @@ export default async function createUserAction(userType: string, currentState, f
         token: token,
         tokenExpiry: null,
         createdAt: today,
-        userId:null
+        userId: null
     }
 
 

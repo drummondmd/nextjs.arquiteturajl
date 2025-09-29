@@ -3,8 +3,10 @@
 import CardContainer from "@/components/area-logada/tarefas/cardContainer";
 import { useState } from "react";
 
+type Props =
+    { splitedProjectPhase: any, splitedProjectPhaseTask: any, splitedConstructionPhase: any, splitedConstructionTask: any }
 
-export default function CardContainerGrid({ splitedProjectPhase, splitedProjectPhaseTask, splitedConstructionPhase, splitedConstructionTask }) {
+export default function CardContainerGrid({ splitedProjectPhase, splitedProjectPhaseTask, splitedConstructionPhase, splitedConstructionTask }: Props) {
     const [container1, setContainer1] = useState(true)
     const [container2, setContainer2] = useState(false)
     const [container3, setContainer3] = useState(false)

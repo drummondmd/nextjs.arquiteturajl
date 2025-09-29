@@ -2,7 +2,7 @@ import { raw } from "@prisma/client/runtime/library";
 import { pool } from "./db-config";
 import { prisma } from "./prisma";
 import normalizePrismaData from "../utilis/normalize-prisma";
-import { ConstructionPhase, ConstructionTask, paymentType, Project, ProjectDetail, ProjectPhase, User } from "@prisma/client";
+import { ConstructionPhase, ConstructionTask, paymentType, Project, ProjectDetail, ProjectPhase, User, UserProfile } from "@prisma/client";
 import { convertIsoDatesInArrayObjects } from "../utilis/normalizeDateInArrayOrObject";
 
 ///USUARIOS
@@ -15,7 +15,11 @@ const typeTest = await prisma.user.findUnique({
     include: { profile: true },
     omit: { passwordHash: true }
 })
-export type UserWithProfile = typeof typeTest
+
+
+type TUser = Omit<User, "passwordHash">
+export type UserWithProfile = TUser & { profile: UserProfile | null } | null
+
 
 export async function getUser(userEmail: string) {
     try {

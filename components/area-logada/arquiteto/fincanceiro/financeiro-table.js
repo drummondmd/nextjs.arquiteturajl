@@ -49,7 +49,7 @@ export default function FinanceiroTable({ array, tipo }) {
             arrayFiltrado = arrayFiltrado.filter((item) => item.status === filtros.status);
         }
         setFilteredArray(arrayFiltrado)
-    }, [filtros])
+    }, [filtros,array,today])
 
     const dropdownDateOpt = [
         { display: "Janeiro", value: 1 }, { display: "Fevereiro", value: 2 }, { display: "Março", value: 3 }, { display: "Abril", value: 4 }, { display: "Maio", value: 5 }, { display: "Junho", value: 6 },

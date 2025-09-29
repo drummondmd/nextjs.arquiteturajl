@@ -17,20 +17,20 @@ export const authOptions = {
     providers: [CredentialsProvider({
         name: "Credenciais",
         credentials: {
-            username: { label: "Email", type: "text", placeholder: "email cadastrado" },
+            email: { label: "Email", type: "text", placeholder: "email cadastrado" },
             password: { label: "Password", type: "password" }
         },
-        async authorize(credentials, req) {
+        async authorize(credentials, _req) {
             try {
                 const user = await prisma.user.findUnique({
-                    where: { email: credentials?.username },
+                    where: { email: credentials?.email },
                     include: { profile: true }
                 })
-                const isPasswordMatched = await checkPassword(credentials?.password, user?.passwordHash)
+                const isPasswordMatched = await checkPassword(credentials?.password, user?.passwordHash) as boolean
                 if (!user || !isPasswordMatched) {
                     return null
                 } else {
-                    return { image:user.profile?.avatarUrl, userId:user.id, userType: user.userType, email: user.email, firstName: user.profile?.firstName, lastName: user.profile?.lastName }
+                    return { id: user.id, image: user.profile?.avatarUrl, userId: user.id, userType: user.userType, email: user.email, firstName: user.profile?.firstName, lastName: user.profile?.lastName }
                 }
 
             } catch (error) {
@@ -39,7 +39,10 @@ export const authOptions = {
 
             }
 
-        }
+        },
+        // pages: {
+        //     signIn: '/login',
+        // }
 
 
 
@@ -50,7 +53,7 @@ export const authOptions = {
             console.log(url, baseUrl)
             return baseUrl + "/redirect"
         },
-        async jwt({ token, user }) {
+        async jwt({ token, user }: { token: any, user: any }) {
             if (user) {
                 token.userId = user.userId
                 token.firstName = user.firstName;
@@ -59,8 +62,8 @@ export const authOptions = {
             }
             return token
         },
-        async session({session,token}){
-            if(token){
+        async session({ session, token }: { session: any, token: any }) {
+            if (token) {
                 session.user.firstName = token.firstName
                 session.user.lastName = token.lastName
                 session.user.userType = token.userType

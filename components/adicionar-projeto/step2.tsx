@@ -2,7 +2,7 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 import { FormField } from "../ui/form-field";
 import transformArrayinOptions from "@/lib/utilis/transformArrayInOptions";
 
-export default function Step2({ methods, users, formState }) {
+export default function Step2({ methods, users, formState }: { methods: any, users: any, formState: any }) {
     return (
         <div className="space-y-6">
             <div>

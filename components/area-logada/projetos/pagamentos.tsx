@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { formatarDataBR } from "@/lib/utilis/formatDate";
+import { userType, Payment } from "@prisma/client";
 import Link from "next/link";
 
-export default function PagamentosEmProjeto({ payments, role, projectId }) {
+export default function PagamentosEmProjeto({ payments, role }: { payments: Payment[], role: userType }) {
 
     return (
         <div>
@@ -26,7 +27,8 @@ export default function PagamentosEmProjeto({ payments, role, projectId }) {
                                 < td > {payment.status} </td>
                                 < td > {formatarDataBR(payment.dueDate)
                                 } </td>
-                                < td > R$ {payment.amount.toLocaleString('pt-BR')} </td>
+                                < td > R$ {payment.amount.toLocaleString()} </td>
+                                {/* Tirei o 'pt-BR' do argumento do localeString */}
                             </tr>
                         ))
                     }

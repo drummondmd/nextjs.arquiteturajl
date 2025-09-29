@@ -14,7 +14,7 @@ export default async function InfoArquiteto() {
     }
 
     const user = await getUser(session.user.email)
-    if (!user) {
+    if (!user || !user?.profile) {
         notFound()
     }
 

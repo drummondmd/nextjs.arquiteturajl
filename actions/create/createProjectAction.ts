@@ -14,7 +14,7 @@ type ProjectDetailType = z.infer<typeof projectDetailSchema>
 
 
 
-export default async function createProjectAction(data: ProjectAndDetailSchema): Promise<{ success: boolean; message: string; projectId?: string; }> {
+export default async function createProjectAction(data: ProjectAndDetailSchema): Promise<{ success: boolean; message: string; projectId?: string | null | undefined; }> {
 
     ///validar dados com zod, se erro já retornar
     const zodResponse = projectAndDetailSchema.safeParse(data)
@@ -25,7 +25,7 @@ export default async function createProjectAction(data: ProjectAndDetailSchema):
     }
 
     ///anexar imagem no cloudnary se imagem a ser anexada.
-    let secure_url: string = null
+    let secure_url: string | null = null
     if (data.coverUrl) {
         const file = data.coverUrl;
         const arrayBuffer = await file.arrayBuffer();
@@ -43,7 +43,7 @@ export default async function createProjectAction(data: ProjectAndDetailSchema):
     ///ajustar dados.
     ///trocando file do cliente para url do cloundnary
 
-    type AdjustProjectType = Omit<ProjectType, "coverUrl"> & { coverUrl: string }
+    type AdjustProjectType = Omit<ProjectType, "coverUrl"> & { coverUrl: string | null }
 
     let projectData: AdjustProjectType = {
         title: zodResponse.data.title,

@@ -1,18 +1,22 @@
 'use client'
 
-import { UserCompleto } from "@/lib/db/select";
+import { ProjetoCompleto, UserCompleto } from "@/lib/db/select";
+import { userType } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function HubGridProjetos({ user} :{user:UserCompleto}) {
-  const role = user?.userType
-
-  const itens = user?.projects
-
+export default function HubGridProjetos({ user }: { user: NonNullable<UserCompleto> }) {
   const router = useRouter()
 
-  function Card({ projeto, role, referencia }) {
+
+  const role = user.userType
+
+  const itens = user?.projects
+  if (!itens) return <p>Erro, sem projetos</p>
+
+
+  function Card({ projeto, role }: { projeto: any, role: userType }) {
     const imagemSrc =
       projeto.coverUrl ||
       "https://placehold.co/600x400.png?text=Imagem+Indispon%C3%ADvel";
@@ -62,7 +66,7 @@ export default function HubGridProjetos({ user} :{user:UserCompleto}) {
               key={item.id}
               projeto={item}
               role={role}
-              referencia={"projetos"}
+              // referencia={"projetos"}
 
             />
           ))}

@@ -1,8 +1,10 @@
+'use client'
+
 import { UserWithProfile } from "@/lib/db/select";
 import { FormField, SubmitButton } from "../ui/form-field";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { userProfileSchema } from "@/lib/validationSchemas/schemas";
+import { userProfileSchema, UserProfileType } from "@/lib/validationSchemas/schemas";
 import { format, formatDate, parseISO } from "date-fns";
 import { toast, Toaster } from "sonner";
 import { success } from "zod";
@@ -10,22 +12,28 @@ import uptadeUserProfileAction from "@/actions/update/updateUserProfileAction";
 import transformArrayinOptions from "@/lib/utilis/transformArrayInOptions";
 import convertToLocalDate from "@/lib/utilis/convertToLocalDate";
 import { Label } from "recharts";
+import { UserProfile } from "@prisma/client";
 
-export default function EditProfileForm({ user }: { user: UserWithProfile }) {
+export default function EditProfileForm({ user }: { user: NonNullable<UserWithProfile> }) {
 
-    if (!user) return <p>Erro ao encontrar usuário</p>
-    const profile = user.profile;
+    // if (!user) return <p>Erro ao encontrar usuário</p>
+    type ProfileInClient = Omit<UserProfile, "birthDate"> & { birthDate: string | null }
 
-    profile.birthDate = format(profile?.birthDate, "yyyy-MM-dd");
+    const profile = user.profile as ProfileInClient
+
+    user.profile?.birthDate ? profile.birthDate = format(user.profile?.birthDate, "yyyy-MM-dd") : profile.birthDate = null
     profile.avatarUrl = null
 
-    const defaultNotNullValues = Object.fromEntries(
-        Object.entries(profile).filter(([chave, valor]) => valor !== null && valor !== undefined)
-    );
+    // const defaultNotNullValues = Object.fromEntries(
+    //     Object.entries(profile).filter(([chave, valor]) => valor !== null && valor !== undefined)
+    // ) as UserProfileType
+
+    ////problemaparase resolver depois
+
 
     const methods = useForm({
         resolver: zodResolver(userProfileSchema),
-        defaultValues: defaultNotNullValues
+        // defaultValues: defaultNotNullValues
     })
 
     async function onSubmit(data: any) {
@@ -40,9 +48,9 @@ export default function EditProfileForm({ user }: { user: UserWithProfile }) {
     }
     const onError = () => {
         toast.error("Confira todos os campos.")
+        console.log(methods.formState.errors)
     };
 
-    console.log(methods.formState)
 
 
 
@@ -177,7 +185,7 @@ export default function EditProfileForm({ user }: { user: UserWithProfile }) {
                                 as="file"
                                 error={methods.formState.errors?.avatarUrl?.message}
                                 label={"Foto de Capa"}
-                                onChange={e => field.onChange(e.target.files[0])}
+                                onChange={(e: any) => field.onChange(e.target.files[0])}
                             />
                         }
                     />

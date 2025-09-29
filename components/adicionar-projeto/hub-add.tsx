@@ -1,10 +1,11 @@
 'use client'
 
+import { ProjetoCompleto } from "@/lib/db/select";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 
-export default function HubAdd({ project }) {
+export default function HubAdd({ project }:{project:ProjetoCompleto}) {
     const router = useRouter();
     const links = [
         { label: "Fases de projeto", table: "projectPhase", link: `/arquiteto/projetos/add/projectPhase?projectId=${project.id}` },

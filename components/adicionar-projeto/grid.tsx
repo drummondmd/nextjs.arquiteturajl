@@ -19,7 +19,7 @@ import createProjectAction from "@/actions/create/createProjectAction";
 const schemas = {
     projectSchema: {
         clientId: z.nullish(z.uuid()),
-        title: z.string("Digite pelo menos 5 caracteres").min(5,"Digite pelo menos 5 caracteres"),
+        title: z.string("Digite pelo menos 5 caracteres").min(5, "Digite pelo menos 5 caracteres"),
         projectType: z.string("Selecione um valor válido").min(5),
         investmentExpectation: z.coerce.number("Preencha um valor válido"),
         area: z.string("Preencha o campo corretamente"),
@@ -44,7 +44,7 @@ export type ProjectDetailType = z.infer<typeof schemas.projectDetailSchema>
 export const unifiedSchema = z.object({ ...schemas.projectSchema, ...schemas.projectDetailSchema })
 type ProjectAndDetail = z.infer<typeof unifiedSchema>
 
-export default function GridAdicionarProjeto({ users }) {
+export default function GridAdicionarProjeto({ users }: { users: any }) {
     const router = useRouter();
 
     const methods = useForm({

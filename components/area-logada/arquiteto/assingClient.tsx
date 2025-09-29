@@ -24,6 +24,8 @@ import transformArrayinOptions from "@/lib/utilis/transformArrayInOptions"
 import { toast, Toaster } from "sonner"
 import { success } from "zod"
 import assingProjectOwnerAction from "@/actions/update/assingClientToProjectAction"
+import { UserCompleto, UserWithProfile } from "@/lib/db/select"
+import { User, UserProfile } from "@prisma/client"
 
 const frameworks = [
     {
@@ -100,17 +102,27 @@ const frameworks = [
 // }
 
 
-export default function AssingClient({ projectId }) {
+export default function AssingClient({ projectId }: { projectId: string }) {
     const [open, setOpen] = React.useState(false)
     const [value, setValue] = React.useState("")
-    const [usuarios, setUsuarios] = React.useState([])
+    const [usuarios, setUsuarios] = React.useState<{ value: string; label: string }[] | []>([])
     const [fetched, setFetched] = React.useState(false)
 
     async function fetchOptions() {
         if (fetched) return;
         const res = await fetch("/api/usuarios?userType=cliente")
-        const rawResponse = (await res.json()).response;
-        setUsuarios(transformArrayinOptions(rawResponse))
+        const rawResponse = (await res.json()).response as Array<User & { profile: NonNullable<UserProfile> }>
+        setUsuarios(
+            transformArrayinOptions(
+                rawResponse.map(user => ({
+                    id: user.id,
+                    profile: {
+                        firstName: user.profile.firstName ?? undefined,
+                        lastName: user.profile.lastName ?? undefined
+                    }
+                }))
+            )
+        )
         setFetched(true)
     }
 
@@ -125,15 +137,10 @@ export default function AssingClient({ projectId }) {
         }
 
     }
-
-    console.log(usuarios)
-    console.log(usuarios.find((user) => user.label.includes(value)))
-    console.log(value)
-
     return (
         <>
             <Toaster richColors />
-            <Popover onOpenChange={(open) => {
+            <Popover onOpenChange={(open: boolean) => {
                 if (open) fetchOptions()
             }} >
                 <PopoverTrigger asChild>
@@ -160,7 +167,7 @@ export default function AssingClient({ projectId }) {
                                     <CommandItem className={""}
                                         key={user.value}
                                         value={user.label}
-                                        onSelect={(currentValue) => {
+                                        onSelect={(currentValue: string) => {
                                             setValue(currentValue === value ? "" : currentValue)
                                             OnSelectClient(user.value)
                                             setOpen(false)

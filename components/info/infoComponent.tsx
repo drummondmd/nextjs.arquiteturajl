@@ -7,7 +7,7 @@ import resetPasswordAction from "@/actions/update/resetPassword"
 import { toast, Toaster } from "sonner"
 import deleteUserAcc from "@/actions/delete/deleteAccAction"
 
-export default function InfoComponent({ user }: { user: UserWithProfile }) {
+export default function InfoComponent({ user }: { user: any }) {
     const [selector, setSelector] = useState(1)
     const Cliente = () => <p className="text-gray-600">Nada adicional a ser definido no momento.</p>
     const Arquiteto = () => <p className="text-gray-600">Nada adicional a ser definido no momento.</p>

@@ -6,7 +6,7 @@ import { CirclePlus } from "lucide-react";
 import Link from "next/link";
 
 
-export default function Step1({ methods, users, formState }) {
+export default function Step1({ methods, users, formState }: { methods: any, users: any, formState: any }) {
     return (
         <div className="space-y-6">
             <div className="flex">
@@ -59,7 +59,7 @@ export default function Step1({ methods, users, formState }) {
                             error={formState.errors?.investmentExpectation?.message}
                             label="Expectativa de investimento"
                             value={field.value ? field.value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) : " "}
-                            onChange={(e) => {
+                            onChange={(e: any) => {
                                 const raw = e.target.value.replace(/\D/g, "");
                                 const numeric = Number(raw) / 100;
                                 field.onChange(numeric);
@@ -93,7 +93,7 @@ export default function Step1({ methods, users, formState }) {
                     render={({ field }) =>
                         <FormField
                             name="coverUrl"
-                            onChange={e => field.onChange(e.target.files[0])}
+                            onChange={(e: any) => field.onChange(e.target.files[0])}
                             error={formState.errors?.coverUrl?.message}
                             as="file"
                             label="Imagem de capa"

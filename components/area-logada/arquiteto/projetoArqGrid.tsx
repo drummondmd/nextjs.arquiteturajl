@@ -5,8 +5,9 @@ import HorizontalTab from "../horizontal-tab";
 import Link from "next/link";
 import StatusBadge from "../gerenciamento/statusBadge";
 import AssingClient from "./assingClient"
+import { ProjetoCompleto, UserCompleto } from "@/lib/db/select";
 
-export default function ProjetoArqGrid({ projetos }) {
+export default function ProjetoArqGrid({ projetos }: { projetos: Array<ProjetoCompleto & { client: UserCompleto }> }) {
 
     const [display, setDisplay] = useState("em_andamento");
 
@@ -54,7 +55,7 @@ export default function ProjetoArqGrid({ projetos }) {
                                             <td>{projeto.title}</td>
 
                                             <td className="text-center">
-                                                {projeto.client && projeto.client.profile.firstName + " " + projeto.client.profile.lastName}
+                                                {projeto.client && projeto.client.profile?.firstName + " " + projeto.client.profile?.lastName}
                                                 {!projeto.client && <AssingClient projectId={projeto.id} />}
                                             </td>
                                             <td className="text-center">

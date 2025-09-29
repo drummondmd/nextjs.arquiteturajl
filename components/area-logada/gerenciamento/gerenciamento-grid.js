@@ -12,24 +12,6 @@ import OrcamentoGerenciamento from "./orcamento-gerenciamento"
 
 export default function GerenciamentoGrid({ user, projeto,tipo_usuario }) {
 
-  ////se nenhuma fase registrada, mostrar aviso
-  if (projeto.constructionPhases.length == 0) {
-    return <>
-      <div className="px-2 py-4">
-        <header className="mb-4 border-bottom pb-3">
-          <h1 className="display-4">{projeto.title}</h1>
-          <h2 className="mt-4 fw-semibold text-muted">Página de gerenciamento de Obra</h2>
-        </header>
-        <p>Nenhuma obra ainda registrada</p>
-        <AddGerenciamento />
-      </div>
-
-
-    </>
-  }
-
-
-
   const [display, setDisplay] = useState("Resumo")
   const arrayOfTabs = [{ nome: "Resumo" }, { nome: "Detalhado" }, { nome: "Status" }, { nome: "Orçamento" }]
 

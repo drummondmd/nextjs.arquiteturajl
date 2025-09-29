@@ -145,7 +145,7 @@ export default function NewPaymentForm({ project, projects, onSubmitParent, defa
                     )}
                     {/* Mensagem de erro temporaria */}
                     {errors.payments && errors.payments.map((erro) => (
-                        <div className="text-red-500 text-sm mt-2">
+                        <div key={erro.id} className="text-red-500 text-sm mt-2">
                             {JSON.stringify(erro)}
                         </div>
                     ))}

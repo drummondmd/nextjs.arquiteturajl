@@ -5,7 +5,7 @@ import { prisma } from "../../../../../../lib/db/prisma";
 import normalizePrismaData from "../../../../../../lib/utilis/normalize-prisma";
 import HubAdd from "@/components/adicionar-projeto/hub-add";
 
-export default async function AddInfoIntoProjectsPage({ searchParams, params }) {
+export default async function AddInfoIntoProjectsPage({ searchParams, params }: { searchParams: Promise<{ [key: string]: string | undefined }>, params: any }) {
 
     const { projectId } = await searchParams;
     const { rotaDeAdicionar } = await params

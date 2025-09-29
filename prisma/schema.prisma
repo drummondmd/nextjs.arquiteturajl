@@ -15,12 +15,18 @@ model User {
   accountStatus String?           @default("ativo")
   createdAt     DateTime?         @default(now())
   lastLogin     DateTime?         @default(now())
-  userType      String?
+  userType      userType
   budgets       Budget[]
   projects      Project[]
   uploadedDocs  ProjectDocument[] @relation("UserUploadedDocuments")
   profile       UserProfile?
   tokens        UserToken[]
+}
+
+enum userType {
+  admin
+  arquiteto
+  cliente
 }
 
 model UserProfile {

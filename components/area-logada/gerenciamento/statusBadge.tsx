@@ -3,14 +3,39 @@ import updateStatusByBadge from "../../../actions/update/updateStatusByBadge"
 import { statusPhase } from "@prisma/client";
 
 
-export default function StatusBadge({ status, isDropdown, item, table }: { status?: string, isDropdown: boolean, item: any, table: string }) {
+type StatusKey =
+    | "concluido"
+    | "pago"
+    | "aceito"
+    | "em_andamento"
+    | "pendente"
+    | "planejado"
+    | "cancelado"
+    | "atrasado"
+    | "rejeitado"
+    | "unknown";
 
-    if (!status) {
-        status = item.status
+export default function StatusBadge({
+    status,
+    isDropdown,
+    item,
+    table,
+}: {
+    status?: StatusKey,
+    isDropdown: boolean,
+    item: any,
+    table: string
+}) {
+
+    if (status === undefined) {
+        if (item.status === undefined) {
+            status = "unknown";
+        } else {
+            status = item.status as StatusKey;
+        }
     }
-
     // Tailwind color classes for each status
-    let colors = {
+    const colors: Record<StatusKey, string> = {
         "concluido": "bg-emerald-500 text-white hover:text-black",
         "pago": "bg-emerald-500 text-white",
         "aceito": "bg-emerald-500 text-white hover:text-black",
@@ -20,12 +45,13 @@ export default function StatusBadge({ status, isDropdown, item, table }: { statu
         "cancelado": "bg-pink-600 text-white",
         "atrasado": "bg-red-500 text-white",
         "rejeitado": "bg-red-500 text-white",
-    }
+        "unknown": "bg-gray-300 text-gray-700"
+    };
 
-    const badgeClass = `inline-block px-3 py-1 rounded-full text-xs font-semibold shadow-sm capitalize transition-colors duration-200 ${colors[status] || 'bg-gray-300 text-gray-700'}`;
+    const badgeClass = `inline-block px-3 py-1 rounded-full text-xs font-semibold shadow-sm capitalize transition-colors duration-200 ${colors[status]}`;
 
     if (!isDropdown) {
-        return <span className={badgeClass}>{status}</span>
+        return <span className={badgeClass}>{status || item.status}</span>
     }
 
 
@@ -40,8 +66,8 @@ export default function StatusBadge({ status, isDropdown, item, table }: { statu
     ]
     const itensOfDd = tableCheatSheet.find((elem) => elem.table === table)?.enum || [];
 
-    function handleChangeStatus(elem:any, item:any, table:string) {
-        console.log(elem,item,table)
+    function handleChangeStatus(elem: any, item: any, table: string) {
+        console.log(elem, item, table)
         updateStatusByBadge(elem, table, item.id)
     }
 
@@ -56,7 +82,7 @@ export default function StatusBadge({ status, isDropdown, item, table }: { statu
                         <DropdownMenuItem key={elem} asChild>
                             <span
                                 onClick={() => handleChangeStatus(elem, item, table)}
-                                className={`block w-full px-3 py-1 my-1 rounded-full text-xs font-semibold capitalize cursor-pointer transition-colors duration-150 ${colors[elem] || 'bg-gray-300 text-gray-700'} hover:scale-105 hover:ring-2 hover:ring-blue-300 hover:text-black`}
+                                className={`block w-full px-3 py-1 my-1 rounded-full text-xs font-semibold capitalize cursor-pointer transition-colors duration-150 ${colors[elem as StatusKey] || 'bg-gray-300 text-gray-700'} hover:scale-105 hover:ring-2 hover:ring-blue-300 hover:text-black`}
                             >
                                 {elem}
                             </span>

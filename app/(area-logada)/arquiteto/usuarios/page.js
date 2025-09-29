@@ -17,7 +17,7 @@ export default async function UsuariosPage() {
                         <thead className="bg-gray-50">
                             <tr>
                                 <th className="py-3 px-4 text-left font-semibold text-xs text-gray-500 uppercase">Nome</th>
-                                <th className="py-3 px-4 text-left font-semibold text-xs text-gray-500 uppercase">Tipo</th>
+                                <th className="py-3 px-4 text-left font-semibold text-xs text-gray-500 uppercase">Editar perfil</th>
                                 <th className="py-3 px-4 text-left font-semibold text-xs text-gray-500 uppercase">Status</th>
                                 <th className="py-3 px-4 text-left font-semibold text-xs text-gray-500 uppercase">Verificado?</th>
                             </tr>
@@ -26,7 +26,7 @@ export default async function UsuariosPage() {
                             {arrayOfUsers.map((user) => (
                                 <tr key={user.id} className="hover:bg-gray-50">
                                     <td className="py-2 px-4 text-gray-800 font-medium">{`${user.profile.firstName} ${user.profile.lastName}`}</td>
-                                    <td className="py-2 px-4 text-gray-700">{user.userType}</td>
+                                    <td className="py-2 px-4 text-gray-700"><Link href={"/arquiteto/usuarios/edit?userEmail=" + user.email}>Editar</Link> </td>
                                     <td className="py-2 px-4 text-gray-700">{user.accountStatus}</td>
                                     <td className="py-2 px-4 text-gray-700">{user.emailVerified ? "Sim" : "Não"}</td>
                                 </tr>

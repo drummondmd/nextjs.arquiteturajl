@@ -16,7 +16,7 @@ export default async function stringForSlug(string: string): Promise<string> {
 
     const arrayForTest = [first, second, third]
 
-    let choosen: string;
+    let choosen: string = third; // Default to 'third' if no unique slug is found
 
     for (let i = 0; i < arrayForTest.length; i++) {
         const response = await prisma.project.findUnique({ where: { slug: arrayForTest[i] } })
@@ -27,7 +27,7 @@ export default async function stringForSlug(string: string): Promise<string> {
 
     }
 
-    return choosen
+    return choosen;
 
 }
 

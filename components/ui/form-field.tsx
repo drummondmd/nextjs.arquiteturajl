@@ -3,6 +3,27 @@
 import { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
 
+type FormFielProps = {
+    label: string,
+    name: string,
+    type?: string
+    placeholder?: string
+    value?: any
+    required?: boolean
+    disabled?: boolean
+    error?: string
+    options?: { value: string, label: string }[],         // usado para select ou radio {label:"",value:""}
+    icon?: any         // JSX opcional
+    as?: string         // input | textarea | select | file | radio | date
+    className?: string,
+    state?: any
+    defaultValue?: any,
+    // defaultValue = state?.payload ? state.payload.get(name) : "",
+    register?: any,
+    staticForm?: boolean, /// prop para determinar se formulario é estatico, não tem mudança de estado.
+    onChange?: any,
+}
+
 export function FormField({
     label,
     name,
@@ -12,7 +33,7 @@ export function FormField({
     required = false,
     disabled = false,
     error = '',
-    options = [],         // usado para select ou radio {label:"",value:""}
+    options,     // usado para select ou radio {label:"",value:""}
     icon = null,          // JSX opcional
     as = 'input',         // input | textarea | select | file | radio | date
     className = '',
@@ -21,10 +42,10 @@ export function FormField({
     // defaultValue = state?.payload ? state.payload.get(name) : "",
     register = undefined,
     staticForm = false, /// prop para determinar se formulario é estatico, não tem mudança de estado.
-    onChange = staticForm ? undefined : onChange,
+    onChange
 
 
-}) {
+}: FormFielProps) {
     const [showPassword, setShowPassword] = useState(false);
     const inputType = type === 'password' && showPassword ? 'text' : type;
 
@@ -33,14 +54,15 @@ export function FormField({
 
     const renderField = () => {
         if (as === 'textarea') {
-            return <textarea rows="4" {...commonProps()} />;
+            return <textarea rows={4} {...commonProps()} />;
         }
 
         if (as === 'select') {
             return (
                 <select {...commonProps()}>
                     <option value="">Selecione...</option>
-                    {options.map((opt) => (
+
+                    {options && options.map((opt) => (
                         <option key={opt.value} value={opt.value}>
                             {opt.label}
                         </option>
@@ -66,7 +88,7 @@ export function FormField({
         if (as === 'radio') {
             return (
                 <div className="flex flex-col md:flex-row md:items-center md:gap-6 gap-2">
-                    {options.map((opt) => (
+                    {options && options.map((opt) => (
 
                         <label key={opt.value} className="inline-flex items-center gap-2">
                             <input
@@ -119,7 +141,9 @@ export function FormField({
             required,
             disabled,
             className: baseInputClasses,
-            register
+            register,
+            defaultValue,
+            value
         };
         // Se value está definido, não passe defaultValue
 

@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "build:legacy-css": "postcss styles/legacy.css -o styles/legacy.scoped.css --config ./postcss.legacy.config.cjs",
-    "dev:legacy-css": "postcss styles/legacy.css -o styles/legacy.scoped.css --config ./postcss.legacy.config.cjs -w"
+    "dev:legacy-css": "postcss styles/legacy.css -o styles/legacy.scoped.css --config ./postcss.legacy.config.cjs -w",
+    "type-check":"tsc"
   },
   "prisma": {
     "seed": "node --compiler-options {\"module\"} prisma/seed.js"
@@ -19,6 +20,7 @@
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-dropdown-menu": "^2.1.15",
     "@radix-ui/react-hover-card": "^1.1.15",
+    "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-popover": "^1.1.15",
     "@radix-ui/react-slot": "^1.2.3",
     "bcrypt": "^6.0.0",

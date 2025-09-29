@@ -6,6 +6,7 @@ import { FormField, SubmitButton } from "../../components/ui/form-field"
 import { useActionState } from "react"
 import generateRandomPassword, { generateToken } from "../../lib/hash/token"
 import { parseISO } from "date-fns"
+import { userType } from "@prisma/client"
 
 
 // await sendEmail("marceloll2@yahoo.com.br","teste",null,"Teste de envio")
@@ -60,14 +61,14 @@ type CreateUserState = {
     // add other fields as needed
 };
 
-export default function CreateUserSimplified({ creator }) {
+export default function CreateUserSimplified({ creator }: { creator: userType }) {
 
 
-    const [state, formAction, isPending] = useActionState<CreateUserState>(createUserAction.bind(null, creator), { success: undefined, message: undefined })
+    const [state, formAction, isPending] = useActionState<CreateUserState>(createUserAction.bind(null, creator,undefined,undefined), { success: undefined, message: undefined })
 
     return (
         <>
-        {/* coloquei o static form pois esse form não é modificado no cliente somente enviado para backend */}
+            {/* coloquei o static form pois     esse form não é modificado no cliente somente enviado para backend */}
             <form action={formAction} className="mt-6 max-w-3xl mx-auto p-6 space-y-6 bg-white rounded shadow">
                 <FormField label={"Email"} name={"email"} type="email" state={state} required staticForm />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

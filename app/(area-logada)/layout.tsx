@@ -19,10 +19,10 @@ export default async function LayoutAreaLogada({ children }: { children: ReactEl
     if (!user) {
         notFound()
     }
-    const userType = user.userType || "cliente"
+    const userType  = user.userType
 
     //selecionando menu apropriado
-    const links = linksForSideBar.find((item) => item.role === userType).links
+    const links = linksForSideBar.find((item) => item.role === userType)?.links
 
     return (
         <div className="row">

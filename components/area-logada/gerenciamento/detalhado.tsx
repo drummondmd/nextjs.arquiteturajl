@@ -19,18 +19,15 @@ export default function DetalhadoGerenciamento({ projeto, user, tipo_usuario }: 
     type ConstructionPhaseAdjusted = ConstructionPhase & { tasks: ConstructionTask[] }
     const etapas: ConstructionPhaseAdjusted[] = projeto.constructionPhases
 
-    if (etapas.length === 0) {
-        return <p className="text-center text-gray-500 py-8">Nenhuma etapa registrada</p>
-    }
+
 
     const inicialDisplay = etapas[0].id
 
     const [display, setDisplay] = useState(inicialDisplay)
     const [modal, setModal] = useState(false)
-    const [modalData, setModalData] = useState({data:{} as ConstructionPhaseAdjusted| ConstructionTask,table:"" as "constructionPhase" | "constructionTask"} )
+    const [modalData, setModalData] = useState({ data: {} as ConstructionPhaseAdjusted | ConstructionTask, table: "" as "constructionPhase" | "constructionTask" })
 
     const displayContent: ConstructionPhaseAdjusted = etapas.find((etapa) => etapa.id === display) || etapas[0]
-
 
     function Tarefas({ tasks }: { tasks: Array<ConstructionTask> }) {
 
@@ -48,7 +45,7 @@ export default function DetalhadoGerenciamento({ projeto, user, tipo_usuario }: 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
                             <div>
                                 <span className="font-medium text-gray-800 mr-2">{task.name}</span>
-                                <button title="Editar" onClick={() => { setModal(true); setModalData({data:task,table:"constructionTask"}) }}><SquarePen size={"18"} /></button>
+                                <button title="Editar" onClick={() => { setModal(true); setModalData({ data: task, table: "constructionTask" }) }}><SquarePen size={"18"} /></button>
 
 
 
@@ -61,7 +58,7 @@ export default function DetalhadoGerenciamento({ projeto, user, tipo_usuario }: 
                             <p className="text-sm text-gray-600">Orçamento: {formatMoney(task.budget as unknown as number)}</p>
                         </div>
                         <div>
-                            {task.link && <LinkPreview url={task.link} children={task.fornecedor} />}
+                            {task.link && <LinkPreview url={task.link}>{task.fornecedor}</LinkPreview>}
                         </div>
                     </div>
                 ))}
@@ -110,7 +107,7 @@ export default function DetalhadoGerenciamento({ projeto, user, tipo_usuario }: 
                             <p>{displayContent.notes}</p>
                             {tipo_usuario === "arquiteto" && (
                                 <div>
-                                    <button className="ml-4 px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition" onClick={() => { setModal(true); setModalData({data:displayContent,table:"constructionPhase"}) }}>Editar</button>
+                                    <button className="ml-4 px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition" onClick={() => { setModal(true); setModalData({ data: displayContent, table: "constructionPhase" }) }}>Editar</button>
                                     <Link href={`/arquiteto/projetos/${projeto.slug}/gerenciamento-de-obra/addTasks?constructionPhaseId=${displayContent.id}`} className="ml-2 px-3 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200 transition">Adicionar Tarefas</Link>
                                 </div>
                             )}
