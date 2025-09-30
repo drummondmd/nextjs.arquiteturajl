@@ -17,46 +17,55 @@ import Modal from "../../../ui/modal";
 import { EditFormGeneric } from "../../edit-form-generic";
 import StatusBadge from "../../gerenciamento/statusBadge";
 import { SquarePen } from "lucide-react";
+import { PaymentItem } from "@/app/(area-logada)/arquiteto/financeiro/page";
 
-export default function FinanceiroTable({ array, tipo }) {
+export default function FinanceiroTable({ array, tipo }: { array: Array<PaymentItem>, tipo: string }) {
     const today = new Date()
     const mesAtual = today.getMonth() + 1;
     const proxMes = mesAtual === 12 ? 1 : mesAtual + 1;
-    const anoAtual = new Date().getFullYear();
+    const anoAtual = today.getFullYear();
 
     const [filteredArray, setFilteredArray] = useState(array);
-    const [filtros, setFiltros] = useState({ periodo: mesAtual, status: null })
+    const [filtros, setFiltros] = useState<{ periodo: number | null, status: null | string }>({ periodo: mesAtual, status: null })
     const [modal, setModal] = useState(false);
-    const [modalData, setModalData] = useState();
+    const [modalData, setModalData] = useState<PaymentItem>();
+
+    const { periodo, status } = filtros;
 
     useEffect(() => {
-        let referenceDate = today
+        let referenceDate = new Date(today)
         let arrayFiltrado = array;
-        if (filtros.periodo > 12) {
-            referenceDate.setFullYear(filtros.periodo);
-            arrayFiltrado = arrayFiltrado.filter((item) => isSameYear(new Date(item.dueDate), referenceDate))
-        }
-        if (filtros.periodo <= 12 && filtros.periodo !== null) {
-            referenceDate.setMonth(filtros.periodo - 1)
-            arrayFiltrado = arrayFiltrado.filter((item) => isSameMonth(new Date(item.dueDate), referenceDate) && isSameYear(new Date(item.dueDate), today))
-        }
-        if (filtros.periodo === null) {
+
+        if (periodo === null) {
             arrayFiltrado = arrayFiltrado
         }
-        if (filtros.status === null) {
+
+        if (periodo != null && periodo > 12) {
+            referenceDate.setFullYear(periodo);
+            arrayFiltrado = arrayFiltrado.filter((item) => isSameYear(new Date(item.dueDate || today), referenceDate))
+        }
+        if (periodo !== null && periodo <= 12) {
+            referenceDate.setMonth(periodo - 1)
+            arrayFiltrado = arrayFiltrado.filter((item) => isSameMonth(new Date(item.dueDate || today), referenceDate) && isSameYear(new Date(item.dueDate || today), today))
+        }
+
+        if (status === null) {
             arrayFiltrado = arrayFiltrado;
         } else {
-            arrayFiltrado = arrayFiltrado.filter((item) => item.status === filtros.status);
+            arrayFiltrado = arrayFiltrado.filter((item) => item.status === status);
         }
-        setFilteredArray(arrayFiltrado)
-    }, [filtros,array,today])
+        setFilteredArray(prev => {
+            if (JSON.stringify(prev) === JSON.stringify(arrayFiltrado)) return prev;
+            return arrayFiltrado;
+        });
+    }, [array, periodo, status, today])
 
     const dropdownDateOpt = [
         { display: "Janeiro", value: 1 }, { display: "Fevereiro", value: 2 }, { display: "Março", value: 3 }, { display: "Abril", value: 4 }, { display: "Maio", value: 5 }, { display: "Junho", value: 6 },
         { display: "Julho", value: 7 }, { display: "Agosto", value: 8 }, { display: "Setembro", value: 9 }, { display: "Outubro", value: 10 }, { display: "Novembro", value: 11 }, { display: "Dezembro", value: 12 }
     ];
 
-    function Table({ filteredArray }) {
+    function Table({ filteredArray }: { filteredArray: Array<PaymentItem> }) {
 
 
         return (
@@ -104,7 +113,7 @@ export default function FinanceiroTable({ array, tipo }) {
             <div className="flex flex-wrap gap-4 mb-6">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="rounded px-4 py-2 border border-gray-300 bg-white hover:bg-gray-50">Período</Button>
+                        <Button variant="outline" className="rounded px-4 py-2 border border-gray-300 bg-white hover:bg-gray-50" size={undefined}>Período</Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="rounded shadow-lg bg-white border border-gray-200">
                         <DropdownMenuItem onClick={() => setFiltros({ ...filtros, periodo: mesAtual })}>Mês atual</DropdownMenuItem>
@@ -119,7 +128,7 @@ export default function FinanceiroTable({ array, tipo }) {
                 </DropdownMenu>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="rounded px-4 py-2 border border-gray-300 bg-white hover:bg-gray-50">Status</Button>
+                        <Button variant="outline" className="rounded px-4 py-2 border border-gray-300 bg-white hover:bg-gray-50" size={undefined}>Status</Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="rounded shadow-lg bg-white border border-gray-200">
                         <DropdownMenuItem onClick={() => setFiltros({ ...filtros, status: null })}>Todos</DropdownMenuItem>

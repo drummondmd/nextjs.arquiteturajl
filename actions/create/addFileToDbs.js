@@ -28,13 +28,7 @@ export async function addFileToCloudnaryeAndDB(prev, formData) {
     try {
 
         const response = await uploadToCloudinary(buffer, filename, mimeType)
-        console.log("primeira resposta")
-        console.log(response)
-
         const secondResponse = await insertDocumentsInfo(inputs, response)
-
-        console.log("segunda resposta")
-        console.log(response)
 
         if (!secondResponse) {
             throw new Error()

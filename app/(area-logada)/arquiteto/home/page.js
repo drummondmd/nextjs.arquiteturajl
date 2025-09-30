@@ -1,4 +1,4 @@
-import { ChartBarDefault, ChartComponent } from "@/components/area-logada/arquiteto/home/chart"
+import { ChartBarDefault } from "@/components/area-logada/arquiteto/home/chart"
 import ClientForHome from "./clientComponent"
 import { prisma } from "@/lib/db/prisma"
 

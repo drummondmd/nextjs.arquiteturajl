@@ -19,8 +19,6 @@ export default async function AddInfoIntoProjectsPage({ searchParams, params }: 
     })
     const project = normalizePrismaData(projectRaw)
 
-    console.log(project)
-
 
     if (!projectId || !project) {
         return <p>Projeto não encontrado</p>

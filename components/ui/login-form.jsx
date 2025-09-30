@@ -41,7 +41,6 @@ const router = useRouter()
       email: data.email,
       password: data.password
     })
-    console.log(data,response)
 
     if (response.error) {
       methods.setError("root", { type: "string", message: "Usuário ou senha inválidos." })
@@ -51,9 +50,6 @@ const router = useRouter()
     }
 
   }
-
-  console.log(methods.getValues("email"))
-
 
 
   return (

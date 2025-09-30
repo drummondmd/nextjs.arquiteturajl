@@ -20,7 +20,7 @@ import { redirect } from "next/navigation";
  */
 
 
-export default async function createUserAction(userType: string, _currentState: any, formData: any): Promise<{ success: boolean; payload?: Object; message?: string; }> {
+export default async function createUserAction(userType: string, _currentState?: any, formData?: any): Promise<{ success: boolean; payload?: Object; message?: string; }> {
 
     const today = new Date()
     const tempPassword = generateRandomPassword()
@@ -60,7 +60,7 @@ export default async function createUserAction(userType: string, _currentState: 
         accountStatus: 'ativo',
         createdAt: today,
         lastLogin: null,
-        userType: 'cliente'
+        userType: "cliente"
     }
 
     const userProfile = {
@@ -103,7 +103,9 @@ export default async function createUserAction(userType: string, _currentState: 
     try {
 
         ///criando usuario
+        console.log(user)
         const response = await createFunction("user", user)
+        console.log(response)
         ///se resposta verdadeira acrescentar as outras tabelas
         if (response) {
             userProfile.userId = response.id;
@@ -123,7 +125,7 @@ export default async function createUserAction(userType: string, _currentState: 
         ////checar se respo
 
     } catch (error) {
-        console.log(error, "Erro ao inserir dados na base de dados.")
+        console.error(error, "Erro ao inserir dados na base de dados.")
         return { success: false, payload: formData, message: "Erro ao cadastrar usuario no banco de dados." }
 
 

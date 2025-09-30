@@ -1,11 +1,11 @@
-'use client';
+'use client'
 
 import { useState } from "react";
-import HorizontalTab from "../horizontal-tab";
 import Link from "next/link";
 import StatusBadge from "../gerenciamento/statusBadge";
 import AssingClient from "./assingClient"
 import { ProjetoCompleto, UserCompleto } from "@/lib/db/select";
+import HorizontalTab from "../horizontal-tab";
 
 export default function ProjetoArqGrid({ projetos }: { projetos: Array<ProjetoCompleto & { client: UserCompleto }> }) {
 

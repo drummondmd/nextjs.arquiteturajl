@@ -15,7 +15,6 @@ export default async function assingProjectOwnerAction(projectId: string, userId
             data: { clientId: userId }
         })
 
-        console.log(response)
         if (!response) {
             throw new Error()
         }

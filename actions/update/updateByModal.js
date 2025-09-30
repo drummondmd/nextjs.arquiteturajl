@@ -21,7 +21,6 @@ export default async function updateByModal(prev, formData) {
     Object.values(inputs)
         .forEach((elem, idx) => {
             if (elem === null || elem === "") {
-                console.log("empty", keys[idx])
                 const emptyKey = keys[idx]
                 delete inputs[emptyKey]
             }

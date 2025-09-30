@@ -9,9 +9,8 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
     const { userEmail } = query;
     if (!userEmail || Array.isArray(userEmail)) return notFound()
 
-        const user = await getUserCompleto(userEmail)
+    const user = await getUserCompleto(userEmail)
 
-    console.log(user, userEmail)
 
     if (!user) return (
         <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">

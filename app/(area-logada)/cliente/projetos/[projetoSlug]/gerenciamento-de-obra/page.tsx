@@ -21,7 +21,6 @@ export default async function GerenciamentoObraPage({ params }: { params: any })
 
     ///página de erro se cliente não for o do projeto.
     if (!projeto || session.user.userId != projeto.clientId) {
-        console.log("cliente não autorizado");
         notFound()
 
     }

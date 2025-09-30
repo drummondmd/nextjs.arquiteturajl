@@ -1,4 +1,6 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
+'use client'
+
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import updateStatusByBadge from "../../../actions/update/updateStatusByBadge"
 import { statusPhase } from "@prisma/client";
 
@@ -27,13 +29,9 @@ export default function StatusBadge({
     table: string
 }) {
 
-    if (status === undefined) {
-        if (item.status === undefined) {
-            status = "unknown";
-        } else {
-            status = item.status as StatusKey;
-        }
-    }
+    let finalStatus: StatusKey = status ? status : item.status;
+
+
     // Tailwind color classes for each status
     const colors: Record<StatusKey, string> = {
         "concluido": "bg-emerald-500 text-white hover:text-black",
@@ -48,10 +46,10 @@ export default function StatusBadge({
         "unknown": "bg-gray-300 text-gray-700"
     };
 
-    const badgeClass = `inline-block px-3 py-1 rounded-full text-xs font-semibold shadow-sm capitalize transition-colors duration-200 ${colors[status]}`;
+    const badgeClass = `inline-block px-3 py-1 rounded-full text-xs font-semibold shadow-sm capitalize transition-colors duration-200 ${colors[finalStatus]}`;
 
     if (!isDropdown) {
-        return <span className={badgeClass}>{status || item.status}</span>
+        return <span className={badgeClass}>{finalStatus}</span>
     }
 
 
@@ -71,14 +69,13 @@ export default function StatusBadge({
         updateStatusByBadge(elem, table, item.id)
     }
 
-    return (
-        <DropdownMenu>
+    return (<DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <span className={badgeClass + " cursor-pointer hover:opacity-80"}>{status}</span>
+                <span className={badgeClass + " cursor-pointer hover:opacity-80"}>{finalStatus}</span>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="rounded-md shadow-lg bg-white border border-gray-200 min-w-[120px] p-1">
                 {itensOfDd.map((elem) => (
-                    elem !== status && (
+                    elem !== finalStatus && (
                         <DropdownMenuItem key={elem} asChild>
                             <span
                                 onClick={() => handleChangeStatus(elem, item, table)}

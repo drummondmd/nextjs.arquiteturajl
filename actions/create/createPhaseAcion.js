@@ -6,7 +6,6 @@ import { convertIsoDatesInArrayObjects } from "../../lib/utilis/normalizeDateInA
 import { createManyFunction } from "../../lib/db/create"
 
 export default async function createPhaseAction(table, data) {
-    console.log(table)
 
 
     let projectId;

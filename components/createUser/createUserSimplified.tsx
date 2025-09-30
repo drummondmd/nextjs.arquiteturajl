@@ -64,7 +64,7 @@ type CreateUserState = {
 export default function CreateUserSimplified({ creator }: { creator: userType }) {
 
 
-    const [state, formAction, isPending] = useActionState<CreateUserState>(createUserAction.bind(null, creator,undefined,undefined), { success: undefined, message: undefined })
+    const [state, formAction, isPending] = useActionState<CreateUserState>(createUserAction.bind(null, creator), { success: undefined, message: undefined })
 
     return (
         <>

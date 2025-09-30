@@ -3,6 +3,9 @@ import { prisma } from "@/lib/db/prisma";
 import normalizePrismaData from "@/lib/utilis/normalize-prisma";
 import Modal from "../../../../components/ui/modal";
 import Link from "next/link";
+import { Payment } from "@prisma/client";
+
+export type PaymentItem = Omit<Payment, "createdAt" | "dueDate"> & { createdAt: string | null, dueDate: string | null, project: { title: string, slug: string } }
 
 export default async function FinanceiroPage() {
 
@@ -17,10 +20,12 @@ export default async function FinanceiroPage() {
         },
     })
 
+
     const financeiro = normalizePrismaData(financeiroRaw)
 
-    const entradas = financeiro.filter(item => item.paymentType === 'entrada')
-    const saidas = financeiro.filter(item => item.paymentType === 'saida')
+    const entradas = financeiro.filter((item: PaymentItem) => item.paymentType === 'entrada') as Array<PaymentItem>
+    const saidas = financeiro.filter((item: PaymentItem) => item.paymentType === 'saida') as Array<PaymentItem>
+
 
     return (<div className="container py-4">
         <div className="d-flex justify-content-between align-items-center mb-4">

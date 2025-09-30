@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -18,14 +17,11 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { prisma } from "@/lib/db/prisma"
-import { NextResponse } from "next/server"
 import transformArrayinOptions from "@/lib/utilis/transformArrayInOptions"
 import { toast, Toaster } from "sonner"
-import { success } from "zod"
 import assingProjectOwnerAction from "@/actions/update/assingClientToProjectAction"
-import { UserCompleto, UserWithProfile } from "@/lib/db/select"
 import { User, UserProfile } from "@prisma/client"
+import { useState } from "react"
 
 const frameworks = [
     {
@@ -50,63 +46,12 @@ const frameworks = [
     },
 ]
 
-// function ExampleCombobox() {
-//     const [open, setOpen] = React.useState(false)
-//     const [value, setValue] = React.useState("")
-
-//     return (
-//         <Popover open={open} onOpenChange={setOpen}>
-//             <PopoverTrigger asChild>
-//                 <Button size={"24px"}
-//                     variant="outline"
-//                     role="combobox"
-//                     aria-expanded={open}
-//                     className="w-[200px] justify-between"
-//                 >
-//                     {value
-//                         ? frameworks.find((framework) => framework.value === value)?.label
-//                         : "Select framework..."}
-//                     <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-//                 </Button>
-//             </PopoverTrigger>
-//             <PopoverContent className="w-[200px] p-0">
-//                 <Command>
-//                     <CommandInput placeholder="Search framework..." />
-//                     <CommandList>
-//                         <CommandEmpty>No framework found.</CommandEmpty>
-//                         <CommandGroup>
-//                             {frameworks.map((framework) => (
-//                                 <CommandItem
-//                                     key={framework.value}
-//                                     value={framework.value}
-//                                     onSelect={(currentValue) => {
-//                                         setValue(currentValue === value ? "" : currentValue)
-//                                         setOpen(false)
-//                                     }}
-//                                 >
-//                                     <CheckIcon
-//                                         className={cn(
-//                                             "mr-2 h-4 w-4",
-//                                             value === framework.value ? "opacity-100" : "opacity-0"
-//                                         )}
-//                                     />
-//                                     {framework.label}
-//                                 </CommandItem>
-//                             ))}
-//                         </CommandGroup>
-//                     </CommandList>
-//                 </Command>
-//             </PopoverContent>
-//         </Popover>
-//     )
-// }
-
 
 export default function AssingClient({ projectId }: { projectId: string }) {
-    const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState("")
-    const [usuarios, setUsuarios] = React.useState<{ value: string; label: string }[] | []>([])
-    const [fetched, setFetched] = React.useState(false)
+    const [open, setOpen] = useState(false)
+    const [value, setValue] = useState("")
+    const [usuarios, setUsuarios] = useState<{ value: string; label: string }[] | []>([])
+    const [fetched, setFetched] = useState(false)
 
     async function fetchOptions() {
         if (fetched) return;

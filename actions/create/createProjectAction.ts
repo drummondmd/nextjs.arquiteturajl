@@ -19,7 +19,6 @@ export default async function createProjectAction(data: ProjectAndDetailSchema):
     ///validar dados com zod, se erro já retornar
     const zodResponse = projectAndDetailSchema.safeParse(data)
     if (!zodResponse.success) {
-        console.log("não validou")
         // console.error(zodResponse.error?.message)
         return { success: false, message: "Erro na validação de dados" }
     }
