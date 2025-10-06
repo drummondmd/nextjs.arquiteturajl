@@ -21,18 +21,6 @@ export function EditFormGeneric({ data, table }) {
     const datas = ["dueDate", "startDate", "expectedEndDate"];
     const excludedeInputs = ["createdAt", "project", "notificationSent", "status", "paymentType", "endDate", "responsible", "tasks","actualCost"];
 
-    /*buscar outros elementos que não podem ser atualizados dessa forma
-    entradas.forEach((entrada, idx) => {
-        if (hiddenInputs.find((elem) => elem === entrada) || datas.find((elem) => elem === entrada)) {
-        } else {
-            console.log(entrada, defaultValues[idx])
-
-        }
-    })
-    console.log(defaultValues.map((elem) => typeof (elem)))
-    */
-
-
     return (
         <form action={formAction}>
             <input name="table" value={table} readOnly hidden />

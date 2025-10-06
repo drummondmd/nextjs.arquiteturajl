@@ -103,9 +103,7 @@ export default async function createUserAction(userType: string, _currentState?:
     try {
 
         ///criando usuario
-        console.log(user)
         const response = await createFunction("user", user)
-        console.log(response)
         ///se resposta verdadeira acrescentar as outras tabelas
         if (response) {
             userProfile.userId = response.id;

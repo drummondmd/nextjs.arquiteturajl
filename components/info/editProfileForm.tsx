@@ -24,16 +24,16 @@ export default function EditProfileForm({ user }: { user: NonNullable<UserWithPr
     user.profile?.birthDate ? profile.birthDate = format(user.profile?.birthDate, "yyyy-MM-dd") : profile.birthDate = null
     profile.avatarUrl = null
 
-    // const defaultNotNullValues = Object.fromEntries(
-    //     Object.entries(profile).filter(([chave, valor]) => valor !== null && valor !== undefined)
-    // ) as UserProfileType
+    const defaultNotNullValues = Object.fromEntries(
+        Object.entries(profile).filter(([chave, valor]) => valor !== null && valor !== undefined)
+    ) as UserProfileType
 
     ////problemaparase resolver depois
 
 
     const methods = useForm({
         resolver: zodResolver(userProfileSchema),
-        // defaultValues: defaultNotNullValues
+        defaultValues: defaultNotNullValues
     })
 
     async function onSubmit(data: any) {
@@ -48,7 +48,6 @@ export default function EditProfileForm({ user }: { user: NonNullable<UserWithPr
     }
     const onError = () => {
         toast.error("Confira todos os campos.")
-        console.log(methods.formState.errors)
     };
 
 

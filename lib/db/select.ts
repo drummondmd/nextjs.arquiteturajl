@@ -102,7 +102,7 @@ export async function getEstimativaCustos() {
         }
 
     } catch (error) {
-        console.log(error, "Erro ao obter usuarios")
+        console.error(error, "Erro ao obter usuarios")
         return null
 
     }

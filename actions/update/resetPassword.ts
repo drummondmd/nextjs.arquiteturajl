@@ -20,6 +20,7 @@ export default async function resetPasswordAction(user: UserWithProfile): Promis
         await prisma.userToken.deleteMany({
             where: { AND: [{ userId: user.id }, { tokenType: "reset_password" }] }
         })
+
         const tokenInsert = await prisma.userToken.create({
             data: {
                 userId: user.id,

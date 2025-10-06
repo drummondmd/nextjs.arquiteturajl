@@ -10,7 +10,6 @@ import { formatarDataBR } from "@/lib/utilis/formatDate";
 import PagamentosEmProjeto from "./pagamentos"
 
 export default function ProjetosGrid({ user, projeto, tipo_usuario }) {
-  console.log(tipo_usuario)
   const router = useRouter()
 
   const [display, setDisplay] = useState("Etapas");

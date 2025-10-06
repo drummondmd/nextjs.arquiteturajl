@@ -6,7 +6,6 @@ import { useState } from "react";
 
 export default function CardTarefas({ title, color, array, displayStatus, collapsedAsDefault, isOneProject }) {
 
-    console.log(array)
     if (!color) {
         color = "bg-gray-100"
     }

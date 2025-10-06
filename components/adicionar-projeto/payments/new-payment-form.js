@@ -14,7 +14,6 @@ import createPaymentAction from "../../../actions/create/createPaymentAction"
 //validação de erros do array depois.
 
 export default function NewPaymentForm({ project, projects, onSubmitParent, defaultValues }) {
-    console.log(project, projects, onSubmitParent, defaultValues)
 
     ////2 formas de funcionar, diretamente com o projeto ou geral com possibiliade de selecionar projeto
     ///se definir o projeto não preciso avaliar todos projetos.

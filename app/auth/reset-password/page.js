@@ -1,3 +1,4 @@
+import { prisma } from "@/lib/db/prisma";
 import { getUser } from "../../../lib/db/select";
 import ResetPasswordClient from "./resetPasswordClient";
 

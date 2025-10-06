@@ -152,7 +152,6 @@ export function FormField({
         }
         else if (value || value === undefined && !staticForm) {
             props.value = value ?? "";
-            console.log(props.value)
         }
         return props;
     };

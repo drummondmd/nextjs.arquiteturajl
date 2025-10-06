@@ -1,5 +1,6 @@
 'use server'
 
+import { prisma } from "@/lib/db/prisma";
 import getPercentageOfTasks from "@/lib/utilis/percentageTask";
 import { revalidatePath } from "next/cache";
 

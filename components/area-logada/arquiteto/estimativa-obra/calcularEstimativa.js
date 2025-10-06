@@ -22,7 +22,6 @@ export function calcularEstimativa(referencia, metragem, checkbox) {
 
         })
     })
-    console.log(calcArray.length, "antes")
 
 
     function somarTotal() {
@@ -43,13 +42,6 @@ export function calcularEstimativa(referencia, metragem, checkbox) {
 
     let soma =   somarTotal()
 
-    console.log(calcArray)
-
-
-
-
-
-
-    return {calcArray,soma}
+   return {calcArray,soma}
 
 }

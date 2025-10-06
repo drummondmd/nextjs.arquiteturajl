@@ -65,7 +65,6 @@ export default function StatusBadge({
     const itensOfDd = tableCheatSheet.find((elem) => elem.table === table)?.enum || [];
 
     function handleChangeStatus(elem: any, item: any, table: string) {
-        console.log(elem, item, table)
         updateStatusByBadge(elem, table, item.id)
     }
 

@@ -18,8 +18,10 @@ export default async function TasksPage() {
     const ConstructionPhaseRaw = await prisma.ConstructionPhase.findMany({ include: { project: true } })
     const ConstructionPhase = normalizePrismaData(ConstructionPhaseRaw)
 
-    const ConstructionTaskRaw = await prisma.ConstructionTask.findMany({})
-    const ConstructionTask = normalizePrismaData(ConstructionTaskRaw)
+    const ConstructionTaskRaw = await prisma.constructionTask.findMany({ include: { phase: { include: { project: true } } } })
+    const ConstructionTaskNormalize = normalizePrismaData(ConstructionTaskRaw)
+    const ConstructionTask = ConstructionTaskNormalize.map((elem) => { return { ...elem, project: elem.phase.project } })
+
 
 
 

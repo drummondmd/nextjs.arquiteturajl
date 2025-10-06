@@ -4,8 +4,6 @@ import { Fragment } from "react";
 
 export default function DocumentosGrid({ arrayOfDocuments, role }) {
 
-    console.log(role === "arquiteto")
-
 
     if (arrayOfDocuments.length === 0) {
         return (

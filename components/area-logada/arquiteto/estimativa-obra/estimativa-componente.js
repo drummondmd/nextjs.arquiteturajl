@@ -51,7 +51,6 @@ export default function EstimativaComponent({ referencia }) {
 
     function handleCalculo() {
         const isArrayEmpty = checkbox.some((elem) => elem.valor === true)
-        console.log(checkbox.map((elem)=>elem.nome))
         if (metragem === 0 || !isArrayEmpty) {
             alert("Entre com a metragem ou selecione componentes")
         } else {
