@@ -54,7 +54,7 @@ export default async function createUserAction(userType: string, _currentState?:
 
     //objetos que serão upados na database
     const user = {
-        email: inputs.email,
+        email: inputs.email.toLowerCase(),
         emailVerified: false,
         passwordHash: hashedPassword,
         accountStatus: 'ativo',

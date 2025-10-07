@@ -25,7 +25,7 @@ export function LoginForm({
 
 const router = useRouter()
   const schema = z.object({
-    email: z.email("Insira um email válido"),
+    email: z.email("Insira um email válido").toLowerCase(),
     password: z.string("Insira uma senha válida").min(6, "Sua senha deve contar 6 caracteres.")
   })
 
